@@ -1,0 +1,10 @@
+{
+  "appName": "FurryFoster",
+  "email": "Email",
+  "password": "Password",
+  "login": "Login",
+  "dontHaveAccount": "Don't have an account?",
+  "registerHere": "Register here",
+  "invalidEmail": "Invalid email",
+  "invalidPassword": "Invalid password"
+}

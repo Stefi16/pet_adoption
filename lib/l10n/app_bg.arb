@@ -1,0 +1,10 @@
+{
+  "appName": "FurryFoster",
+  "email": "Имейл",
+  "password": "Парола",
+  "login": "Влизане",
+  "dontHaveAccount": "Нямате акаунт?",
+  "registerHere": "Регистрирайте се тук.",
+  "invalidEmail": "Невалиден имейл",
+  "invalidPassword": "Невалидна парола"
+}
