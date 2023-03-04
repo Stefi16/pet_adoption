@@ -1,85 +1,40 @@
-import 'package:email_validator/email_validator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:pet_adoption/app/app.router.dart';
-import 'package:stacked/stacked.dart';
+import 'package:pet_adoption/authentication/base_authentication_viewmodel.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
+import '../../services/auth_service.dart';
+import '../../services/database_service.dart';
 
-class LoginViewModel extends BaseViewModel {
+class LoginViewModel extends BaseAuthenticationViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
+  final AuthService _authService = locator<AuthService>();
 
-  FocusNode get passwordFocusNode => _passwordFocusNode;
-  final FocusNode _passwordFocusNode = FocusNode();
-
-  final TextEditingController _emailTextController = TextEditingController();
-  TextEditingController get emailTextController => _emailTextController;
-
-  TextEditingController get passwordTextController => _passwordTextController;
-  final TextEditingController _passwordTextController = TextEditingController();
-
-  bool get shouldHidePassword => _shouldHidePassword;
-  bool _shouldHidePassword = true;
-  set _setShouldHidePassword(bool value) {
-    if (_shouldHidePassword != value) {
-      _shouldHidePassword = value;
-      notifyListeners();
-    }
-  }
-
-  bool get hasEmailError => _hasEmailError;
-  bool _hasEmailError = false;
-  set _setHasEmailError(bool value) {
-    if (_hasEmailError != value) {
-      _hasEmailError = value;
-      notifyListeners();
-    }
-  }
-
-  bool get hasPasswordError => _hasPasswordError;
-  bool _hasPasswordError = false;
-  set _setHasPasswordError(bool value) {
-    if (_hasPasswordError != value) {
-      _hasPasswordError = value;
-      notifyListeners();
-    }
-  }
-
-  void login() {
-    if (_hasEmailError || _hasPasswordError) {
-      return;
-    }
-  }
-
-  void toggleVisibility() => _setShouldHidePassword = !shouldHidePassword;
-
-  void onEmailFocusChange(bool isFocused) {
-    if (isFocused) {
-      _setHasEmailError = false;
+  void login() async {
+    if (hasTextFieldError() || isLoading) {
       return;
     }
 
-    _setHasEmailError = _validateEmail(emailTextController.text);
-  }
+    setIsLoading = true;
 
-  void onPasswordFocusChange(bool isFocused) {
-    if (isFocused) {
-      _setHasPasswordError = false;
-      return;
+    final email = emailTextController.text;
+    final password = passwordTextController.text;
+
+    final result = await _authService.loginUser(email, password);
+
+    print(result);
+
+    if (result) {
+      _navigationService.replaceWith(Routes.mainView);
     }
 
-    _setHasPasswordError = _validatePassword(passwordTextController.text);
+    setIsLoading = false;
   }
 
-  bool _validateEmail(String input) => !EmailValidator.validate(input);
+  @override
+  bool hasTextFieldError() => hasEmailError || hasPasswordError;
 
-  bool _validatePassword(String input) {
-    const String passwordExpression = r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$';
-    RegExp regExp = RegExp(passwordExpression);
-
-    return !regExp.hasMatch(input);
-  }
-
-  void goToRegistrationPage() =>
-      _navigationService.navigateTo(Routes.registrationView);
+  void goToRegistrationPage() => _navigationService.replaceWith(
+        Routes.registrationView,
+      );
 }

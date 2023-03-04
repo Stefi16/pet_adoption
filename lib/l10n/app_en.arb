@@ -4,7 +4,21 @@
   "password": "Password",
   "login": "Login",
   "dontHaveAccount": "Don't have an account?",
-  "registerHere": "Register here",
+  "registerHere": "Register here.",
   "invalidEmail": "Invalid email",
-  "invalidPassword": "Invalid password"
+  "invalidPassword": "Password must be at least 8 characters long and contain at least one number and one letter.",
+  "confirmPassword": "Confirm password",
+  "notMatchedPassword": "Passwords do not match.",
+  "registrationError": "There was a problem with the registration, please try again.",
+  "noInternetError": "There is a problem with your internet connection.",
+  "loginError": "There was a problem with logging in, please try again.",
+  "error": "Error",
+  "register": "Register",
+ "backToLogin": "Back to Login.",
+ "alreadyHaveAnAccount": "Already have an account?",
+ "logoutError": "There was a problem with logging out. Please try again.",
+  "adopt": "Adopt",
+  "add": "Add",
+  "profile": "Profile"
+
 }
