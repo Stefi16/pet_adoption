@@ -32,7 +32,8 @@ class DatabaseService {
   }
 
   Future<String> uploadImage(Uint8List imageBytes, String userId) async {
-    final reference = _storage.ref('profile_pics/$userId.jpg');
+    final reference = _storage.ref('profile_picture/$userId.jpg');
+
     await reference.putData(
       imageBytes,
       SettableMetadata(contentType: 'image/jpeg'),

@@ -5,7 +5,7 @@ import 'package:pet_adoption/authentication/widgets/authentication_background.da
 import 'package:pet_adoption/authentication/widgets/password_textfield.dart';
 import 'package:pet_adoption/widgets/custom_button.dart';
 import 'package:pet_adoption/widgets/keyboard_unfocuser.dart';
-import 'package:pet_adoption/widgets/screen_padding.dart';
+import 'package:pet_adoption/authentication/widgets/screen_padding.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

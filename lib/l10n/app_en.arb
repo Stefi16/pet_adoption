@@ -19,6 +19,21 @@
  "logoutError": "There was a problem with logging out. Please try again.",
   "adopt": "Adopt",
   "add": "Add",
-  "profile": "Profile"
-
+  "profile": "Profile",
+  "account": "Account",
+  "choosePhoto": "Choose a photo",
+  "openCamera": "Open Camera",
+  "takePhoto": "Take a photo",
+  "chooseFromLibrary": "Choose from library",
+  "uploadPhoto": "Upload photo",
+  "addUsername": "Add username",
+  "username": "Username",
+  "confirm": "Confirm",
+  "cancel" : "Cancel",
+  "usernameError": "The username should be at least 4 symbols",
+  "changeTheme": "Change theme",
+  "themes": "Themes",
+  "lightTheme": "Light Theme",
+  "darkTheme": "Dark theme",
+  "logout": "Logout"
 }

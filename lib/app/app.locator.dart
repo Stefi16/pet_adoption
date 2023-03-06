@@ -14,6 +14,8 @@ import 'package:stacked_services/src/snackbar/snackbar_service.dart';
 
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
+import '../services/image_upload_service.dart';
+import '../services/theme_switcher_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -30,4 +32,6 @@ Future<void> setupLocator(
   locator.registerLazySingleton(() => BottomSheetService());
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => DatabaseService());
+  locator.registerLazySingleton(() => ImageUploaderService());
+  locator.registerLazySingleton(() => ThemeSwitcherService());
 }

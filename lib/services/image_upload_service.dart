@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImageUploadData {
   Uint8List imageBytes = Uint8List.fromList([]);
@@ -16,6 +17,7 @@ class ImageUploadData {
       imageName = file.name;
       imageBytes = await file.readAsBytes();
     }
+
     if (imageFile != null) {
       imageName = imageFile.files.first.name;
       imageBytes = imageFile.files.first.bytes ?? imageBytes;
@@ -46,6 +48,8 @@ class ImageUploaderService {
 
   Future<ImageUploadData> showImagePickerModal(BuildContext context) async {
     final ImageUploadData data = ImageUploadData();
+    final text = AppLocalizations.of(context)!;
+
     XFile? file;
     FilePickerResult? imageFile;
     if (Platform.isIOS) {
@@ -56,12 +60,12 @@ class ImageUploaderService {
           actions: [
             CupertinoActionSheetAction(
               onPressed: () async => file = await _onOpenCamera(context),
-              child: const Text('Take a photo'),
+              child: Text(text.takePhoto),
             ),
             CupertinoActionSheetAction(
               onPressed: () async =>
                   imageFile = await _onUploadFromGallery(context),
-              child: Text('Chose from library'),
+              child: Text(text.chooseFromLibrary),
             ),
           ],
         ),
@@ -72,23 +76,27 @@ class ImageUploaderService {
 
     await showModalBottomSheet(
       context: context,
-      builder: (BuildContext bc) => SafeArea(
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: Text('Chose a photo'),
-              onTap: () async =>
-                  imageFile = await _onUploadFromGallery(context),
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_camera),
-              title: Text('Open camera'),
-              onTap: () async => file = await _onOpenCamera(context),
-            ),
-          ],
-        ),
-      ),
+      builder: (BuildContext bc) {
+        final text = AppLocalizations.of(context)!;
+
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: Text(text.choosePhoto),
+                onTap: () async =>
+                    imageFile = await _onUploadFromGallery(context),
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: Text(text.openCamera),
+                onTap: () async => file = await _onOpenCamera(context),
+              ),
+            ],
+          ),
+        );
+      },
     );
     await data.init(file, imageFile);
     return data;

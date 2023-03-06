@@ -1,5 +1,6 @@
 import 'package:pet_adoption/authentication/registration/registration_view.dart';
 import 'package:pet_adoption/main/main_view.dart';
+import 'package:pet_adoption/main/tabs/profile/themes/themes_view.dart';
 import 'package:pet_adoption/splash/splash_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -7,6 +8,8 @@ import 'package:stacked_services/stacked_services.dart';
 import '../authentication/login/login_view.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
+import '../services/image_upload_service.dart';
+import '../services/theme_switcher_service.dart';
 
 @StackedApp(
   routes: [
@@ -23,6 +26,9 @@ import '../services/database_service.dart';
     MaterialRoute(
       page: MainView,
     ),
+    MaterialRoute(
+      page: ThemesView,
+    ),
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),
@@ -31,6 +37,8 @@ import '../services/database_service.dart';
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: AuthService),
     LazySingleton(classType: DatabaseService),
+    LazySingleton(classType: ImageUploaderService),
+    LazySingleton(classType: ThemeSwitcherService),
   ],
 )
 class App {}

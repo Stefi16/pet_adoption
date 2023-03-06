@@ -10,9 +10,10 @@ import 'package:pet_adoption/authentication/login/login_view.dart' as _i3;
 import 'package:pet_adoption/authentication/registration/registration_view.dart'
     as _i4;
 import 'package:pet_adoption/main/main_view.dart' as _i5;
+import 'package:pet_adoption/main/tabs/profile/themes/themes_view.dart' as _i6;
 import 'package:pet_adoption/splash/splash_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i6;
+import 'package:stacked_services/stacked_services.dart' as _i7;
 
 class Routes {
   static const splashView = '/';
@@ -23,11 +24,14 @@ class Routes {
 
   static const mainView = '/main-view';
 
+  static const themesView = '/themes-view';
+
   static const all = <String>{
     splashView,
     loginView,
     registrationView,
     mainView,
+    themesView,
   };
 }
 
@@ -48,6 +52,10 @@ class StackedRouter extends _i1.RouterBase {
     _i1.RouteDef(
       Routes.mainView,
       page: _i5.MainView,
+    ),
+    _i1.RouteDef(
+      Routes.themesView,
+      page: _i6.ThemesView,
     ),
   ];
 
@@ -76,6 +84,12 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
+    _i6.ThemesView: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => const _i6.ThemesView(),
+        settings: data,
+      );
+    },
   };
 
   @override
@@ -84,7 +98,7 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i6.NavigationService {
+extension NavigatorStateExtension on _i7.NavigationService {
   Future<dynamic> navigateToSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -141,6 +155,20 @@ extension NavigatorStateExtension on _i6.NavigationService {
         transition: transition);
   }
 
+  Future<dynamic> navigateToThemesView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.themesView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
   Future<dynamic> replaceWithSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -191,6 +219,20 @@ extension NavigatorStateExtension on _i6.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.mainView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithThemesView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.themesView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

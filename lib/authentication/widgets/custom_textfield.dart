@@ -17,6 +17,7 @@ class CustomTextField extends StatelessWidget {
     this.onEditingComplete,
     this.focusNode,
     required this.hasError,
+    this.isBorderBlue = false,
   }) : super(key: key);
 
   final String label;
@@ -32,14 +33,20 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onEditingComplete;
   final FocusNode? focusNode;
   final bool hasError;
+  final bool isBorderBlue;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final Color borderColor = isBorderBlue ? theme.primaryColor : Colors.white;
+    final Color errorColor = theme.colorScheme.error;
+    final Color currentColor = hasError ? errorColor : borderColor;
+
     return Focus(
       onFocusChange: onFocusChanged,
       child: TextFormField(
         style: TextStyle(
-          color: hasError ? Colors.red : Colors.white,
+          color: currentColor,
         ),
         focusNode: focusNode,
         onEditingComplete: onEditingComplete,
@@ -52,16 +59,16 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(
-            color: hasError ? Colors.red : Colors.white,
+            color: currentColor,
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: hasError ? Colors.red : Colors.white.withOpacity(0.4),
+              color: hasError ? errorColor : borderColor.withOpacity(0.4),
             ),
           ),
-          focusedBorder: const OutlineInputBorder(
+          focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.white,
+              color: currentColor,
             ),
           ),
           suffixIcon: GestureDetector(
@@ -70,6 +77,7 @@ class CustomTextField extends StatelessWidget {
               hasError: hasError,
               isPassword: isPassword,
               obscureText: obscureText,
+              errorColor: errorColor,
             ),
           ),
         ),
@@ -84,11 +92,13 @@ class _PasswordFieldIcon extends StatelessWidget {
     required this.isPassword,
     required this.obscureText,
     required this.hasError,
+    required this.errorColor,
   }) : super(key: key);
 
   final bool obscureText;
   final bool isPassword;
   final bool hasError;
+  final Color errorColor;
 
   @override
   Widget build(BuildContext context) {
