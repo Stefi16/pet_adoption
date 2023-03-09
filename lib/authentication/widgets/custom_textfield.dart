@@ -17,7 +17,8 @@ class CustomTextField extends StatelessWidget {
     this.onEditingComplete,
     this.focusNode,
     required this.hasError,
-    this.isBorderBlue = false,
+    this.isBorderPrimaryColor = false,
+    this.maxLines = 1,
   }) : super(key: key);
 
   final String label;
@@ -33,12 +34,14 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onEditingComplete;
   final FocusNode? focusNode;
   final bool hasError;
-  final bool isBorderBlue;
+  final bool isBorderPrimaryColor;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final Color borderColor = isBorderBlue ? theme.primaryColor : Colors.white;
+    final Color borderColor =
+        isBorderPrimaryColor ? theme.primaryColor : Colors.white;
     final Color errorColor = theme.colorScheme.error;
     final Color currentColor = hasError ? errorColor : borderColor;
 
@@ -48,6 +51,7 @@ class CustomTextField extends StatelessWidget {
         style: TextStyle(
           color: currentColor,
         ),
+        maxLines: maxLines,
         focusNode: focusNode,
         onEditingComplete: onEditingComplete,
         keyboardType: keyboardType,
@@ -63,11 +67,13 @@ class CustomTextField extends StatelessWidget {
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
+              width: 2,
               color: hasError ? errorColor : borderColor.withOpacity(0.4),
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
+              width: 2,
               color: currentColor,
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:pet_adoption/app/app.router.dart';
 import 'package:pet_adoption/services/database_service.dart';
 import 'package:stacked/stacked.dart';
@@ -19,9 +20,13 @@ class SplashViewModel extends BaseViewModel {
       final appUser = await _databaseService.getUser(currentUser.uid);
       _databaseService.setCurrentUser(appUser);
 
-      _navigationService.replaceWith(Routes.mainView);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _navigationService.replaceWith(Routes.mainView);
+      });
     } else {
-      _navigationService.replaceWith(Routes.loginView);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _navigationService.replaceWith(Routes.loginView);
+      });
     }
   }
 }

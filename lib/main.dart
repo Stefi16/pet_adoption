@@ -30,7 +30,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainAppViewModel>.reactive(
@@ -38,15 +37,15 @@ class MyApp extends StatelessWidget {
       viewModelBuilder: () => MainAppViewModel(),
       builder: (context, viewModel, child) => MaterialApp(
         localizationsDelegates: const [
-          AppLocalizations.delegate, // Add this line
+          AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
         locale: const Locale('bg'),
         supportedLocales: const [
-          Locale('bg'), // English
-          Locale('en'), // Spanish
+          Locale('bg'),
+          Locale('en'),
         ],
         theme: FlexThemeData.light(
           scheme: viewModel.getProperColorTheme(),

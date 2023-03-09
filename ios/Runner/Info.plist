@@ -37,6 +37,10 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires access to the photo library in order to upload a photo for adoptions or profile pictures.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This app requires access to the camera in order to upload a photo for adoptions or profile pictures.</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>

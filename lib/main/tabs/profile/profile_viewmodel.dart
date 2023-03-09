@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:pet_adoption/services/image_upload_service.dart';
 import 'package:pet_adoption/utils/setup_dialog.dart';
 import 'package:stacked/stacked.dart';
@@ -28,6 +29,8 @@ class ProfileViewModel extends BaseViewModel {
   String getCurrentUserEmail() => _currentUser.email;
 
   String getCurrentUserUsername() => _currentUser.username ?? '';
+
+  String getCurrentUserPhone() => _currentUser.phone ?? '';
 
   String getPhotoUrl() {
     return _currentUser.picture ?? '';
@@ -81,4 +84,25 @@ class ProfileViewModel extends BaseViewModel {
   void goToThemesScreen() => _navigationService.navigateTo(Routes.themesView);
 
   void logout() {}
+
+  String getDateJoined() {
+    final joinedDate = _currentUser.dateJoined;
+    return DateFormat('dd.MM.yyyy').format(joinedDate);
+  }
+
+  void editPhone() async {
+    final result = await _dialogService.showCustomDialog(
+      variant: DialogType.changePhone,
+      barrierDismissible: true,
+    );
+
+    if (result?.confirmed != true) {
+      return;
+    }
+
+    final String phone = result!.data as String;
+    _currentUser.phone = phone;
+    await _databaseService.addUser(_currentUser);
+    notifyListeners();
+  }
 }

@@ -4,7 +4,7 @@ import 'package:pet_adoption/main/tabs/profile/profile_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-const double _photoSize = 100;
+const double _photoSize = 130;
 
 class AccountWidget extends ViewModelWidget<ProfileViewModel> {
   const AccountWidget({Key? key}) : super(key: key);
@@ -16,7 +16,10 @@ class AccountWidget extends ViewModelWidget<ProfileViewModel> {
 
     final email = viewModel.getCurrentUserEmail();
     final username = viewModel.getCurrentUserUsername();
+    final phone = viewModel.getCurrentUserPhone();
     final bool isUsernamePresent = username.isNotEmpty;
+    final bool isPhonePresent = phone.isNotEmpty;
+    final String dateJoined = viewModel.getDateJoined();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -31,7 +34,7 @@ class AccountWidget extends ViewModelWidget<ProfileViewModel> {
               fit: StackFit.expand,
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(_photoSize),
                   child: CachedNetworkImage(
                     imageUrl: viewModel.getPhotoUrl(),
                     progressIndicatorBuilder: (context, url, progress) {
@@ -63,15 +66,15 @@ class AccountWidget extends ViewModelWidget<ProfileViewModel> {
                 Align(
                   alignment: Alignment.topRight,
                   child: Container(
-                    width: 34,
-                    height: 34,
+                    width: _photoSize * 0.3,
+                    height: _photoSize * 0.3,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: theme.iconTheme.color!.withOpacity(0.7),
                     ),
                     child: Icon(
                       Icons.add_a_photo_outlined,
-                      size: 20,
+                      size: _photoSize * 0.18,
                       color: theme.scaffoldBackgroundColor.withOpacity(0.7),
                     ),
                   ),
@@ -81,47 +84,83 @@ class AccountWidget extends ViewModelWidget<ProfileViewModel> {
           ),
         ),
         const SizedBox(width: 15),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GestureDetector(
-              onTap: () => viewModel.editUsername(),
-              behavior: HitTestBehavior.opaque,
-              child: Row(
-                children: [
-                  Text(
-                    isUsernamePresent ? username : text.addUsername,
-                    style: TextStyle(
-                      fontSize: isUsernamePresent ? 20 : 15,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () => viewModel.editUsername(),
+                behavior: HitTestBehavior.opaque,
+                child: Row(
+                  children: [
+                    Text(
+                      isUsernamePresent ? username : text.addUsername,
+                      style: TextStyle(
+                        fontSize: isUsernamePresent ? 20 : 15,
+                        color: isUsernamePresent
+                            ? theme.iconTheme.color!
+                            : theme.iconTheme.color!.withOpacity(0.3),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(width: 5),
+                    Icon(
+                      Icons.edit,
+                      size: 16,
                       color: isUsernamePresent
                           ? theme.iconTheme.color!
                           : theme.iconTheme.color!.withOpacity(0.3),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(width: 5),
-                  Icon(
-                    Icons.edit,
-                    size: 16,
-                    color: isUsernamePresent
-                        ? theme.iconTheme.color!
-                        : theme.iconTheme.color!.withOpacity(0.3),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              email,
-              style: TextStyle(
-                fontSize: isUsernamePresent ? 15 : 20,
-                color: isUsernamePresent
-                    ? theme.iconTheme.color!.withOpacity(0.7)
-                    : theme.iconTheme.color!,
+              const SizedBox(height: 5),
+              Text(
+                email,
+                style: TextStyle(
+                  fontSize: isUsernamePresent ? 15 : 20,
+                  color: isUsernamePresent
+                      ? theme.iconTheme.color!.withOpacity(0.7)
+                      : theme.iconTheme.color!,
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+              const SizedBox(height: 5),
+              Text(
+                '${text.joinedOn} $dateJoined',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: theme.iconTheme.color!.withOpacity(0.7),
+                ),
+              ),
+              const SizedBox(height: 5),
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () => viewModel.editPhone(),
+                child: Row(
+                  children: [
+                    Text(
+                      isPhonePresent ? '${text.phone}: $phone' : text.addPhone,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: isPhonePresent
+                            ? theme.iconTheme.color!.withOpacity(0.7)
+                            : theme.iconTheme.color!.withOpacity(0.3),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(width: 5),
+                    Icon(
+                      Icons.edit,
+                      size: 16,
+                      color: isPhonePresent
+                          ? theme.iconTheme.color!.withOpacity(0.7)
+                          : theme.iconTheme.color!.withOpacity(0.3),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

@@ -11,6 +11,7 @@ class AppUser {
   List<String> favouritePosts;
   DateTime dateJoined;
   String? picture;
+  String? phone;
 
   AppUser({
     required this.id,
@@ -19,6 +20,7 @@ class AppUser {
     required this.favouritePosts,
     required this.dateJoined,
     this.picture,
+    this.phone,
   });
 
   factory AppUser.createNew(String id, String email) {

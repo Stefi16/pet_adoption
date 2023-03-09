@@ -15,6 +15,7 @@ AppUser _$AppUserFromJson(Map<String, dynamic> json) => AppUser(
           .toList(),
       dateJoined: DateTime.parse(json['dateJoined'] as String),
       picture: json['picture'] as String?,
+      phone: json['phone'] as String?,
     );
 
 Map<String, dynamic> _$AppUserToJson(AppUser instance) => <String, dynamic>{
@@ -24,4 +25,5 @@ Map<String, dynamic> _$AppUserToJson(AppUser instance) => <String, dynamic>{
       'favouritePosts': instance.favouritePosts,
       'dateJoined': instance.dateJoined.toIso8601String(),
       'picture': instance.picture,
+      'phone': instance.phone,
     };

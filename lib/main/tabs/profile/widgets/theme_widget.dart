@@ -15,7 +15,7 @@ class ThemeWidget extends ViewModelWidget<ProfileViewModel> {
     final isDarkMode = viewModel.isDarkMode(context);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _RoundedThemeButton(
           onTap: () => viewModel.goToThemesScreen(),
@@ -37,6 +37,7 @@ class ThemeWidget extends ViewModelWidget<ProfileViewModel> {
             ],
           ),
         ),
+        const SizedBox(width: 20),
         _RoundedThemeButton(
           onTap: () => viewModel.toggleMode(isDarkMode),
           centerWidget: Column(
@@ -81,6 +82,7 @@ class _RoundedThemeButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Material(
+      borderRadius: BorderRadius.circular(20),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: onTap,
@@ -89,6 +91,7 @@ class _RoundedThemeButton extends StatelessWidget {
           height: 120,
           width: 120,
           decoration: BoxDecoration(
+            color: theme.primaryColor.withOpacity(0.1),
             border: Border.all(
               color: theme.primaryColor,
               width: 2,

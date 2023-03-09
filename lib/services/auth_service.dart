@@ -68,7 +68,7 @@ class AuthService {
         );
       } else {
         _snackbarService.showSnackbar(
-          message: text.registrationError,
+          message: text.loginError,
           title: text.error,
         );
       }

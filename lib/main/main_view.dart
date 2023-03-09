@@ -12,49 +12,48 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final text = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return ViewModelBuilder<MainViewModel>.reactive(
       viewModelBuilder: () => MainViewModel(),
-      builder: (context, viewModel, child) => Scaffold(
-        body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              const SliverAppBar(
-                title: Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: AppAuthLogo(),
+      builder: (context, viewModel, child) => Container(
+        color: viewModel.isDarkMode(context)
+            ? theme.scaffoldBackgroundColor
+            : theme.primaryColor,
+        child: SafeArea(
+          child: Scaffold(
+            resizeToAvoidBottomInset: viewModel.currentTabIndex != 2,
+            appBar: AppBar(
+              title: const AppAuthLogo(),
+              centerTitle: true,
+            ),
+            body: const _CurrentTab(),
+            bottomNavigationBar: BottomNavigationBar(
+              onTap: (index) => viewModel.changeTab(index),
+              currentIndex: viewModel.currentTabIndex,
+              items: [
+                BottomNavigationBarItem(
+                  icon: const Icon(
+                    Icons.pets,
+                  ),
+                  label: text.adopt,
                 ),
-                centerTitle: true,
-              )
-            ];
-          },
-          body: const _CurrentTab(),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (index) => viewModel.changeTab(index),
-          currentIndex: viewModel.currentTabIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: const Icon(
-                Icons.pets,
-              ),
-              label: text.adopt,
+                BottomNavigationBarItem(
+                  icon: const Icon(
+                    Icons.add_circle_outline,
+                  ),
+                  label: text.add,
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(
+                    Icons.person,
+                  ),
+                  label: text.profile,
+                ),
+              ],
             ),
-            BottomNavigationBarItem(
-              icon: const Icon(
-                Icons.add_circle_outline,
-              ),
-              label: text.add,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(
-                Icons.person,
-              ),
-              label: text.profile,
-            ),
-          ],
+          ),
         ),
       ),
     );

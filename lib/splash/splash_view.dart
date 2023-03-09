@@ -10,7 +10,7 @@ class SplashView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue,
-      body: ViewModelBuilder<SplashViewModel>.reactive(
+      body: ViewModelBuilder<SplashViewModel>.nonReactive(
         viewModelBuilder: () => SplashViewModel(),
         onViewModelReady: (vm) => vm.init(),
         builder: (context, viewModel, child) => Center(

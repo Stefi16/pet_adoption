@@ -4,7 +4,6 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
 import '../../services/auth_service.dart';
-import '../../services/database_service.dart';
 
 class LoginViewModel extends BaseAuthenticationViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
@@ -21,8 +20,6 @@ class LoginViewModel extends BaseAuthenticationViewModel {
     final password = passwordTextController.text;
 
     final result = await _authService.loginUser(email, password);
-
-    print(result);
 
     if (result) {
       _navigationService.replaceWith(Routes.mainView);
