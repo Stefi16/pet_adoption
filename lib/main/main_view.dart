@@ -22,10 +22,24 @@ class MainView extends StatelessWidget {
             ? theme.scaffoldBackgroundColor
             : theme.primaryColor,
         child: SafeArea(
+          bottom: false,
           child: Scaffold(
             resizeToAvoidBottomInset: viewModel.currentTabIndex != 2,
             appBar: AppBar(
-              title: const AppAuthLogo(),
+              title: const AppAuthLogo(
+                removeBottomPadding: true,
+              ),
+              actions: [
+                if (viewModel.currentTabIndex == 0)
+                  IconButton(
+                    splashRadius: 20,
+                    icon: const Icon(
+                      Icons.search,
+                      size: 30,
+                    ),
+                    onPressed: () {},
+                  ),
+              ],
               centerTitle: true,
             ),
             body: const _CurrentTab(),

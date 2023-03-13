@@ -3,26 +3,30 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/main/tabs/add_new_adoption/add_new_adoption_viewmodel.dart';
+import 'package:pet_adoption/main/tabs/add_new_adoption/widgets/error_text.dart';
+import 'package:pet_adoption/utils/extensions.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../utils/calculations.dart';
+import '../../../../utils/common_logic.dart';
 import 'choose_tpye_text.dart';
 
 class ChooseAgeWidget extends ViewModelWidget<AddNewAdoptionViewModel> {
-  const ChooseAgeWidget({Key? key}) : super(key: key, reactive: false);
+  const ChooseAgeWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, AddNewAdoptionViewModel viewModel) {
     final text = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return Row(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        ChooseTypeText(
-          text: text.age,
-        ),
         TextButton(
+          style: TextButton.styleFrom(
+            visualDensity: getMinimumDensity(),
+          ),
           onPressed: () async {
             Map<String, int?>? result = {};
 
@@ -41,23 +45,28 @@ class ChooseAgeWidget extends ViewModelWidget<AddNewAdoptionViewModel> {
             viewModel.setYearsAndMonths(result);
           },
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                viewModel.getProperText(text),
-                style: TextStyle(
-                  color: theme.iconTheme.color!,
-                ),
+              ChooseTypeText(
+                text: viewModel.ageResult.getAnimalAgeText(true),
+                noDots: true,
+                hasError: viewModel.hasAgeError,
               ),
               const SizedBox(width: 5),
               Icon(
                 Icons.edit,
                 size: 18,
-                color: theme.iconTheme.color!,
+                color: viewModel.hasAgeError
+                    ? theme.colorScheme.error
+                    : theme.primaryColor,
               ),
             ],
           ),
         ),
+        if (viewModel.hasAgeError)
+          ErrorText(
+            text: text.ageError,
+            noPadding: true,
+          ),
       ],
     );
   }

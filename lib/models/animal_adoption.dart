@@ -13,13 +13,15 @@ class AnimalAdoption {
   AnimalGender genderType;
   AnimalType animalType;
   bool isApproved;
+  @JsonKey(includeIfNull: false)
   String? breed;
   String country;
   String city;
   String description;
-  String photoUrl;
+  @JsonKey(includeIfNull: false)
+  String? photoUrl;
   AnimalAge animalAge;
-  DateTime datePublished;
+  DateTime? datePublished;
 
   AnimalAdoption({
     required this.userId,
@@ -31,10 +33,10 @@ class AnimalAdoption {
     required this.country,
     required this.city,
     required this.description,
-    required this.photoUrl,
+    this.photoUrl,
     required this.animalAge,
     required this.adoptionId,
-    required this.datePublished,
+    this.datePublished,
   });
 
   factory AnimalAdoption.fromJson(Map<String, dynamic> json) =>

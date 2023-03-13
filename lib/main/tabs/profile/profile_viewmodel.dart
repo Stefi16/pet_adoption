@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:pet_adoption/services/auth_service.dart';
 import 'package:pet_adoption/services/image_upload_service.dart';
 import 'package:pet_adoption/utils/setup_dialog.dart';
 import 'package:stacked/stacked.dart';
@@ -15,6 +16,7 @@ class ProfileViewModel extends BaseViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final AuthService _authService = locator<AuthService>();
   final ThemeSwitcherService _themeSwitcherService =
       locator<ThemeSwitcherService>();
   final ImageUploaderService _imageUploaderService =
@@ -34,6 +36,15 @@ class ProfileViewModel extends BaseViewModel {
 
   String getPhotoUrl() {
     return _currentUser.picture ?? '';
+  }
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  set _setIsLoading(bool isLoading) {
+    if (_isLoading != isLoading) {
+      _isLoading = isLoading;
+      notifyListeners();
+    }
   }
 
   void uploadPhoto(BuildContext context) async {
@@ -83,7 +94,19 @@ class ProfileViewModel extends BaseViewModel {
 
   void goToThemesScreen() => _navigationService.navigateTo(Routes.themesView);
 
-  void logout() {}
+  void logout() async {
+    if (_isLoading) {
+      return;
+    }
+
+    _setIsLoading = true;
+    final result = await _authService.signOut();
+    _setIsLoading = false;
+
+    if (result) {
+      _navigationService.clearStackAndShow(Routes.loginView);
+    }
+  }
 
   String getDateJoined() {
     final joinedDate = _currentUser.dateJoined;

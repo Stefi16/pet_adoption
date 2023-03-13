@@ -16,7 +16,7 @@ class ProfileView extends StatelessWidget {
     final text = AppLocalizations.of(context)!;
 
     return Container(
-      color: theme.scaffoldBackgroundColor,
+      color: theme.iconTheme.color!.withOpacity(0.05),
       child: UniversalPadding(
         child: ViewModelBuilder<ProfileViewModel>.nonReactive(
           viewModelBuilder: () => ProfileViewModel(),

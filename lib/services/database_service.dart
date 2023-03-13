@@ -16,8 +16,13 @@ class DatabaseService {
   AppUser getCurrentUser() => _currentUser;
   late final AppUser _currentUser;
 
-  void setCurrentUser(AppUser currentUser) {
+  final List<AnimalAdoption> _animalAdoptions = [];
+  List<AnimalAdoption> get animalAdoptions => _animalAdoptions;
+
+  void initDatabaseService(
+      AppUser currentUser, List<AnimalAdoption> animalAdoptions) {
     _currentUser = currentUser;
+    _animalAdoptions.addAll(animalAdoptions);
   }
 
   Future<void> addUser(AppUser user) async {
@@ -37,7 +42,7 @@ class DatabaseService {
   Future<void> addAdoption(AnimalAdoption adoption) async {
     await _firebaseFirestore
         .collection(_dbAnimalAdoptions)
-        .doc(const Uuid().v4())
+        .doc(adoption.adoptionId)
         .set(
           adoption.toJson(),
         );
@@ -51,7 +56,7 @@ class DatabaseService {
         );
   }
 
-  Future<List<AnimalAdoption>> getAdoptions(String id) async {
+  Future<List<AnimalAdoption>> getAdoptions() async {
     return _firebaseFirestore.collection(_dbAnimalAdoptions).get().then(
           (data) => data.docs
               .map(
@@ -65,6 +70,18 @@ class DatabaseService {
 
   Future<String> uploadImage(Uint8List imageBytes, String userId) async {
     final reference = _storage.ref('profile_picture/$userId.jpg');
+
+    await reference.putData(
+      imageBytes,
+      SettableMetadata(contentType: 'image/jpeg'),
+    );
+
+    return await reference.getDownloadURL();
+  }
+
+  Future<String> uploadAdoptionImage(
+      Uint8List imageBytes, String adoptionId) async {
+    final reference = _storage.ref('adoption_picture/$adoptionId.jpg');
 
     await reference.putData(
       imageBytes,

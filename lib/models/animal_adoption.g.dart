@@ -17,28 +17,39 @@ AnimalAdoption _$AnimalAdoptionFromJson(Map<String, dynamic> json) =>
       country: json['country'] as String,
       city: json['city'] as String,
       description: json['description'] as String,
-      photoUrl: json['photoUrl'] as String,
+      photoUrl: json['photoUrl'] as String?,
       animalAge: AnimalAge.fromJson(json['animalAge'] as Map<String, dynamic>),
       adoptionId: json['adoptionId'] as String,
-      datePublished: DateTime.parse(json['datePublished'] as String),
+      datePublished: json['datePublished'] == null
+          ? null
+          : DateTime.parse(json['datePublished'] as String),
     );
 
-Map<String, dynamic> _$AnimalAdoptionToJson(AnimalAdoption instance) =>
-    <String, dynamic>{
-      'adoptionId': instance.adoptionId,
-      'userId': instance.userId,
-      'animalName': instance.animalName,
-      'genderType': _$AnimalGenderEnumMap[instance.genderType]!,
-      'animalType': _$AnimalTypeEnumMap[instance.animalType]!,
-      'isApproved': instance.isApproved,
-      'breed': instance.breed,
-      'country': instance.country,
-      'city': instance.city,
-      'description': instance.description,
-      'photoUrl': instance.photoUrl,
-      'animalAge': instance.animalAge.toJson(),
-      'datePublished': instance.datePublished.toIso8601String(),
-    };
+Map<String, dynamic> _$AnimalAdoptionToJson(AnimalAdoption instance) {
+  final val = <String, dynamic>{
+    'adoptionId': instance.adoptionId,
+    'userId': instance.userId,
+    'animalName': instance.animalName,
+    'genderType': _$AnimalGenderEnumMap[instance.genderType]!,
+    'animalType': _$AnimalTypeEnumMap[instance.animalType]!,
+    'isApproved': instance.isApproved,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('breed', instance.breed);
+  val['country'] = instance.country;
+  val['city'] = instance.city;
+  val['description'] = instance.description;
+  writeNotNull('photoUrl', instance.photoUrl);
+  val['animalAge'] = instance.animalAge.toJson();
+  val['datePublished'] = instance.datePublished?.toIso8601String();
+  return val;
+}
 
 const _$AnimalGenderEnumMap = {
   AnimalGender.female: 'female',

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../utils/common_logic.dart';
+
 class CustomRadioButton<T> extends StatelessWidget {
   const CustomRadioButton({
     Key? key,
@@ -25,10 +27,7 @@ class CustomRadioButton<T> extends StatelessWidget {
           value: type,
           groupValue: chosenType,
           onChanged: onChanged,
-          visualDensity: const VisualDensity(
-            horizontal: VisualDensity.minimumDensity,
-            vertical: VisualDensity.minimumDensity,
-          ),
+          visualDensity: getMinimumDensity(),
         ),
         if (onChanged != null)
           GestureDetector(

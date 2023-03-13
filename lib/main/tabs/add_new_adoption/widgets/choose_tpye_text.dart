@@ -5,10 +5,12 @@ class ChooseTypeText extends StatelessWidget {
     Key? key,
     required this.text,
     this.noDots = false,
+    this.hasError = false,
   }) : super(key: key);
 
   final String text;
   final bool noDots;
+  final bool hasError;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class ChooseTypeText extends StatelessWidget {
       noDots ? text : '$text:',
       style: TextStyle(
         fontSize: 15,
-        color: theme.primaryColor,
+        color: hasError ? theme.colorScheme.error : theme.primaryColor,
         fontWeight: FontWeight.bold,
       ),
     );

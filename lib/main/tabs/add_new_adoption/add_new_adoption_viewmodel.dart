@@ -1,12 +1,18 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pet_adoption/app/app.locator.dart';
+import 'package:pet_adoption/models/animal_adoption.dart';
 import 'package:pet_adoption/models/animal_age.dart';
+import 'package:pet_adoption/services/auth_service.dart';
+import 'package:pet_adoption/services/database_service.dart';
 import 'package:pet_adoption/utils/enums.dart';
 import 'package:pet_adoption/utils/extensions.dart';
 import 'package:pet_adoption/utils/setup_dialog.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../services/image_upload_service.dart';
 
@@ -15,6 +21,8 @@ const keyMonths = 'months';
 
 class AddNewAdoptionViewModel extends BaseViewModel {
   final DialogService _dialogService = locator<DialogService>();
+  final DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthService _authService = locator<AuthService>();
   final ImageUploaderService _imageUploaderService =
       locator<ImageUploaderService>();
 
@@ -33,16 +41,32 @@ class AddNewAdoptionViewModel extends BaseViewModel {
   final TextEditingController _descriptionController = TextEditingController();
   TextEditingController get descriptionController => _descriptionController;
 
+  final FocusNode _countryFocusNode = FocusNode();
+  FocusNode get countryFocusNode => _countryFocusNode;
+
+  final FocusNode _cityFocusNode = FocusNode();
+  FocusNode get cityFocusNode => _cityFocusNode;
+
+  final FocusNode _descriptionFocusNode = FocusNode();
+  FocusNode get descriptionFocusNode => _descriptionFocusNode;
+
+  Uint8List? _chosenPhoto;
+  Uint8List? get chosenPhoto => _chosenPhoto;
+  set _setChosenPhoto(Uint8List? newPhoto) {
+    _chosenPhoto = newPhoto;
+    notifyListeners();
+  }
+
   AnimalAge? _ageResult;
   AnimalAge? get ageResult => _ageResult;
-  set _setAgeResult(AnimalAge newAge) {
+  set _setAgeResult(AnimalAge? newAge) {
     _ageResult = newAge;
     notifyListeners();
   }
 
   AnimalGender? _chosenGender;
   AnimalGender? get chosenGender => _chosenGender;
-  set _setNewValue(AnimalGender? newGender) {
+  set _setChosenGender(AnimalGender? newGender) {
     if (_chosenGender != newGender) {
       _chosenGender = newGender;
       notifyListeners();
@@ -121,7 +145,16 @@ class AddNewAdoptionViewModel extends BaseViewModel {
     }
   }
 
-  void chooseGender(AnimalGender? newValue) => _setNewValue = newValue;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  set _setIsLoading(bool isLoading) {
+    if (_isLoading != isLoading) {
+      _isLoading = isLoading;
+      notifyListeners();
+    }
+  }
+
+  void chooseGender(AnimalGender? newValue) => _setChosenGender = newValue;
 
   void chooseType(AnimalType? newValue) => _setNewAnimalTypeValue = newValue;
 
@@ -141,42 +174,6 @@ class AddNewAdoptionViewModel extends BaseViewModel {
     );
   }
 
-  String getProperText(AppLocalizations text) {
-    if (_ageResult == null) {
-      return text.chooseAge;
-    }
-
-    final years = _ageResult?.years;
-    final months = _ageResult?.months;
-
-    if (years != null && months != null) {
-      return '$years ${text.years[0]}. $months ${text.months[0]}.';
-    }
-
-    if (years != null) {
-      return '$years ${text.years[0]}.';
-    }
-
-    return '$years ${text.months[0]}.';
-  }
-
-  String getAnimalTypeName(AnimalType type) {
-    final text = AppLocalizations.of(
-      StackedService.navigatorKey!.currentContext!,
-    )!;
-
-    switch (type) {
-      case AnimalType.cat:
-        return text.cat;
-      case AnimalType.dog:
-        return text.dog;
-      case AnimalType.bird:
-        return text.bird;
-      case AnimalType.other:
-        return text.other;
-    }
-  }
-
   void uploadPhoto(BuildContext context) async {
     final ImageUploadData result =
         await _imageUploaderService.showImagePickerModal(context);
@@ -189,15 +186,57 @@ class AddNewAdoptionViewModel extends BaseViewModel {
       result.imageBytes,
     );
 
-    notifyListeners();
+    _setChosenPhoto = compressedImage;
   }
 
-  void publishAdoption() {
+  void publishAdoption() async {
     _validateAll();
 
-    if (_hasFormError()) {
+    if (_hasFormError() || _isLoading) {
       return;
     }
+
+    _setIsLoading = true;
+    final newAdoptionId = const Uuid().v4();
+    String? url;
+
+    if (chosenPhoto != null) {
+      url = await _databaseService.uploadAdoptionImage(
+        chosenPhoto!,
+        newAdoptionId,
+      );
+    }
+
+    final newAdoption = AnimalAdoption(
+      userId: _authService.currentUserId!,
+      animalName: nameController.text,
+      genderType: _chosenGender!,
+      animalType: _chosenType!,
+      isApproved: false,
+      country: countryController.text,
+      city: cityController.text,
+      description: descriptionController.text,
+      breed: breedController.text.isEmpty ? null : breedController.text,
+      animalAge: ageResult!,
+      adoptionId: newAdoptionId,
+      photoUrl: url,
+    );
+
+    await _databaseService.addAdoption(newAdoption);
+    _clearForm();
+    _setIsLoading = false;
+  }
+
+  void _clearForm() {
+    nameController.clear();
+    _setChosenGender = null;
+    _setNewAnimalTypeValue = null;
+    _setAgeResult = null;
+    _breedController.clear();
+    _countryController.clear();
+    _cityController.clear();
+    _descriptionController.clear();
+    _setChosenPhoto = null;
   }
 
   void _validateName() {
@@ -223,7 +262,7 @@ class AddNewAdoptionViewModel extends BaseViewModel {
 
   void _validateDescription() {
     final description = descriptionController.text.removeWhiteSpaces();
-    _setHasNameError = description.isEmpty || description.length < 10;
+    _setHasDescriptionError = description.isEmpty || description.length < 10;
   }
 
   void _validateAll() {

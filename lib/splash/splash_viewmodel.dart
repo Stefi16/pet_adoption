@@ -18,7 +18,9 @@ class SplashViewModel extends BaseViewModel {
 
     if (currentUser != null) {
       final appUser = await _databaseService.getUser(currentUser.uid);
-      _databaseService.setCurrentUser(appUser);
+      final adoptions = await _databaseService.getAdoptions();
+
+      _databaseService.initDatabaseService(appUser, adoptions);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _navigationService.replaceWith(Routes.mainView);
