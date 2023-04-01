@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pet_adoption/app/app.locator.dart';
 import 'package:pet_adoption/models/animal_adoption.dart';
 import 'package:pet_adoption/models/animal_age.dart';
@@ -220,6 +219,7 @@ class AddNewAdoptionViewModel extends BaseViewModel {
       animalAge: ageResult!,
       adoptionId: newAdoptionId,
       photoUrl: url,
+      datePublished: DateTime.now(),
     );
 
     await _databaseService.addAdoption(newAdoption);
@@ -283,4 +283,25 @@ class AddNewAdoptionViewModel extends BaseViewModel {
       _hasCityError ||
       _hasCountryError ||
       _hasDescriptionError;
+
+  @override
+  void dispose() {
+    _disposeControllers();
+    _disposeFocusNodes();
+    super.dispose();
+  }
+
+  void _disposeControllers() {
+    _nameController.dispose();
+    _breedController.dispose();
+    _countryController.dispose();
+    _cityController.dispose();
+    _descriptionController.dispose();
+  }
+
+  void _disposeFocusNodes() {
+    _cityFocusNode.dispose();
+    _countryFocusNode.dispose();
+    _descriptionFocusNode.dispose();
+  }
 }

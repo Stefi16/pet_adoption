@@ -100,10 +100,10 @@ class ProfileViewModel extends BaseViewModel {
     }
 
     _setIsLoading = true;
-    final result = await _authService.signOut();
+    final success = await _authService.signOut();
     _setIsLoading = false;
 
-    if (result) {
+    if (success) {
       _navigationService.clearStackAndShow(Routes.loginView);
     }
   }

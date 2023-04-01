@@ -30,7 +30,7 @@ class ChooseAgeWidget extends ViewModelWidget<AddNewAdoptionViewModel> {
           onPressed: () async {
             Map<String, int?>? result = {};
 
-            if (!Platform.isIOS) {
+            if (Platform.isIOS) {
               result = await _showCupertinoModalPicker(context);
             } else {
               final dialogResult = await viewModel.showAgeDialog();

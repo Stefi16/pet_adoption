@@ -83,4 +83,13 @@ abstract class BaseAuthenticationViewModel extends BaseViewModel {
 
     return !regExp.hasMatch(input);
   }
+
+  @override
+  void dispose() {
+    _emailTextController.dispose();
+    _passwordTextController.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
+    super.dispose();
+  }
 }

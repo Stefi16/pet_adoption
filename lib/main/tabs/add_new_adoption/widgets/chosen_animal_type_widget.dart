@@ -61,6 +61,7 @@ class ChosenAnimalTypeWidget extends ViewModelWidget<AddNewAdoptionViewModel> {
                           Image.asset(
                             currentType.getAnimalTypeImageName(),
                             width: 20,
+                            color: theme.iconTheme.color,
                           ),
                           const SizedBox(width: 5),
                           Text(

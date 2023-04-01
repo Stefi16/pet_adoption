@@ -22,7 +22,7 @@ class LoginViewModel extends BaseAuthenticationViewModel {
     final result = await _authService.loginUser(email, password);
 
     if (result) {
-      _navigationService.replaceWith(Routes.mainView);
+      _navigationService.replaceWith(Routes.splashView);
     }
 
     setIsLoading = false;

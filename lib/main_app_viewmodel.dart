@@ -36,7 +36,7 @@ class MainAppViewModel extends BaseViewModel {
     return ThemeMode.light;
   }
 
-  FlexScheme getProperColorTheme() {
+  FlexScheme? getProperColorTheme() {
     final int? currentColorThemeValue =
         _themeSwitcherService.currentColorTheme.value;
 

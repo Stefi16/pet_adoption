@@ -76,4 +76,10 @@ class AddProfileDetailsDialogViewModel extends BaseViewModel {
       _validateUsername();
     }
   }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 }

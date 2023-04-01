@@ -13,18 +13,22 @@ class ThemesView extends StatelessWidget {
     final text = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(text.themes),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ViewModelBuilder<ThemesViewModel>.nonReactive(
-          viewModelBuilder: () => ThemesViewModel(),
-          builder: (context, viewModel, child) {
-            final isDarkMode = viewModel.isDarkMode(context);
+    return ViewModelBuilder<ThemesViewModel>.nonReactive(
+      viewModelBuilder: () => ThemesViewModel(),
+      builder: (context, viewModel, child) {
+        final isDarkMode = viewModel.isDarkMode(context);
 
-            return GridView.builder(
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(text.themes),
+            leading: IconButton(
+              onPressed: () => viewModel.goBack(),
+              icon: Icon(Icons.arrow_back_ios_new),
+            ),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: GridView.builder(
               itemCount: FlexScheme.values.length,
               itemBuilder: (context, index) {
                 final currentValue = FlexScheme.values.elementAt(index);
@@ -68,10 +72,10 @@ class ThemesView extends StatelessWidget {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

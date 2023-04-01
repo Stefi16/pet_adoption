@@ -74,5 +74,13 @@
   "ageError": "Please choose age",
   "countryError": "Please enter a country with more than 2 symbols",
   "cityError": "Please enter a city with more than 1 symbol",
-  "descriptionError": "Please enter a description with at least 10 symbols"
+  "descriptionError": "Please enter a description with at least 10 symbols",
+  "owner": "Owner of",
+  "errorWhileLaunchingPhoneNumber": "Error while launching phone number",
+  "favourites": "Favourites",
+  "emptyAnimalTypeCategory": "There are not any adoptions currently available in this category.",
+  "search": "Search",
+  "searchDescription": "Ability to search the title and description of an adoption.",
+  "chat": "Chat",
+  "noMessagesYet": "No messages have been sent yet"
 }

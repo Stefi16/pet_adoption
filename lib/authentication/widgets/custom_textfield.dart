@@ -19,6 +19,10 @@ class CustomTextField extends StatelessWidget {
     required this.hasError,
     this.isBorderPrimaryColor = false,
     this.maxLines = 1,
+    this.backgroundColor,
+    this.suffixIcon,
+    this.textColor,
+    this.prefixIcon,
   }) : super(key: key);
 
   final String label;
@@ -36,6 +40,10 @@ class CustomTextField extends StatelessWidget {
   final bool hasError;
   final bool isBorderPrimaryColor;
   final int? maxLines;
+  final Color? backgroundColor;
+  final Color? textColor;
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +56,9 @@ class CustomTextField extends StatelessWidget {
     return Focus(
       onFocusChange: onFocusChanged,
       child: TextFormField(
+        textAlignVertical: TextAlignVertical.top,
         style: TextStyle(
-          color: currentColor,
+          color: textColor ?? currentColor,
         ),
         maxLines: maxLines,
         focusNode: focusNode,
@@ -61,6 +70,7 @@ class CustomTextField extends StatelessWidget {
         onChanged: onChanged,
         obscureText: obscureText,
         decoration: InputDecoration(
+          fillColor: backgroundColor,
           labelText: label,
           labelStyle: TextStyle(
             color: currentColor,
@@ -77,14 +87,16 @@ class CustomTextField extends StatelessWidget {
               color: currentColor,
             ),
           ),
+          prefixIcon: prefixIcon,
           suffixIcon: GestureDetector(
             onTap: toggleVisibility,
-            child: _PasswordFieldIcon(
-              hasError: hasError,
-              isPassword: isPassword,
-              obscureText: obscureText,
-              errorColor: errorColor,
-            ),
+            child: suffixIcon ??
+                _PasswordFieldIcon(
+                  hasError: hasError,
+                  isPassword: isPassword,
+                  obscureText: obscureText,
+                  errorColor: errorColor,
+                ),
           ),
         ),
       ),

@@ -90,7 +90,7 @@ class RegistrationViewModel extends BaseAuthenticationViewModel {
 
       await _databaseService.addUser(newUser);
 
-      _navigationService.replaceWith(Routes.mainView);
+      _navigationService.replaceWith(Routes.splashView);
     }
 
     setIsLoading = false;
@@ -103,4 +103,10 @@ class RegistrationViewModel extends BaseAuthenticationViewModel {
   void goToLoginPage() => _navigationService.replaceWith(
         Routes.loginView,
       );
+
+  @override
+  void dispose() {
+    _confirmPasswordTextController.dispose();
+    super.dispose();
+  }
 }

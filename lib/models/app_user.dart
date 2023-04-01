@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pet_adoption/app/app.dart';
 
 part 'app_user.g.dart';
 

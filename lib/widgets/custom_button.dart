@@ -21,8 +21,12 @@ class CustomButton extends StatelessWidget {
 
     return SizedBox(
       width: double.maxFinite,
-      height: 50,
+      height: 60,
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        ),
         onPressed: onTap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

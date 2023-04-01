@@ -41,6 +41,10 @@
     <string>This app requires access to the photo library in order to upload a photo for adoptions or profile pictures.</string>
     <key>NSCameraUsageDescription</key>
     <string>This app requires access to the camera in order to upload a photo for adoptions or profile pictures.</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>tel</string>
+    </array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>

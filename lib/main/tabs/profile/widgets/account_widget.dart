@@ -56,7 +56,7 @@ class AccountWidget extends ViewModelWidget<ProfileViewModel> {
                               ? email[0].toUpperCase()
                               : username[0].toUpperCase(),
                           style: const TextStyle(
-                            fontSize: 40,
+                            fontSize: 50,
                           ),
                         ),
                       ),

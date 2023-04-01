@@ -21,52 +21,47 @@ class MainView extends StatelessWidget {
         color: viewModel.isDarkMode(context)
             ? theme.scaffoldBackgroundColor
             : theme.primaryColor,
-        child: SafeArea(
-          bottom: false,
-          child: Scaffold(
-            resizeToAvoidBottomInset: viewModel.currentTabIndex != 2,
-            appBar: AppBar(
-              title: const AppAuthLogo(
-                removeBottomPadding: true,
+        child: Scaffold(
+          resizeToAvoidBottomInset: viewModel.currentTabIndex != 2,
+          appBar: viewModel.currentTabIndex == 0
+              ? null
+              : AppBar(
+                  title: const AppAuthLogo(
+                    removeBottomPadding: true,
+                  ),
+                  centerTitle: true,
+                ),
+          body: const _CurrentTab(),
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) => viewModel.changeTab(index),
+            currentIndex: viewModel.currentTabIndex,
+            items: [
+              BottomNavigationBarItem(
+                icon: const Icon(
+                  Icons.pets_outlined,
+                ),
+                label: text.adopt,
               ),
-              actions: [
-                if (viewModel.currentTabIndex == 0)
-                  IconButton(
-                    splashRadius: 20,
-                    icon: const Icon(
-                      Icons.search,
-                      size: 30,
-                    ),
-                    onPressed: () {},
-                  ),
-              ],
-              centerTitle: true,
-            ),
-            body: const _CurrentTab(),
-            bottomNavigationBar: BottomNavigationBar(
-              onTap: (index) => viewModel.changeTab(index),
-              currentIndex: viewModel.currentTabIndex,
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                    Icons.pets,
-                  ),
-                  label: text.adopt,
+              BottomNavigationBarItem(
+                icon: const Icon(
+                  Icons.add_circle_outline,
                 ),
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                    Icons.add_circle_outline,
-                  ),
-                  label: text.add,
+                activeIcon: const Icon(
+                  Icons.add_circle,
                 ),
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                    Icons.person,
-                  ),
-                  label: text.profile,
+                label: text.add,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(
+                  Icons.person_2_outlined,
                 ),
-              ],
-            ),
+                activeIcon: const Icon(
+                  Icons.person_2,
+                ),
+                label: text.profile,
+              ),
+            ],
           ),
         ),
       ),

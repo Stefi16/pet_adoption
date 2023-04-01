@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:pet_adoption/utils/enums.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -64,6 +63,28 @@ extension AnimalGenderName on AnimalGender {
   }
 }
 
+extension AnimalGenderIcon on AnimalGender {
+  IconData getAnimalGenderIcon() {
+    switch (this) {
+      case AnimalGender.female:
+        return Icons.female;
+      case AnimalGender.male:
+        return Icons.male;
+    }
+  }
+}
+
+extension AnimalGenderBackground on AnimalGender {
+  String getAnimalGenderBackground() {
+    switch (this) {
+      case AnimalGender.female:
+        return 'assets/backgrounds/female_pet_background.png';
+      case AnimalGender.male:
+        return 'assets/backgrounds/male_pet_background.png';
+    }
+  }
+}
+
 extension AnimalTypeImageName on AnimalType {
   String getAnimalTypeImageName() {
     switch (this) {
@@ -99,7 +120,7 @@ extension AnimalAgeName on AnimalAge? {
     final months = this?.months;
 
     if (years != null && months != null) {
-      return '$years ${text.years[0]}. $months ${text.months[0]}.';
+      return '$years${text.years[0]}. $months ${text.months[0]}.';
     }
 
     if (years != null) {

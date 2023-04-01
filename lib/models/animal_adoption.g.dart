@@ -60,5 +60,7 @@ const _$AnimalTypeEnumMap = {
   AnimalType.cat: 'cat',
   AnimalType.dog: 'dog',
   AnimalType.bird: 'bird',
+  AnimalType.rabbit: 'rabbit',
+  AnimalType.fish: 'fish',
   AnimalType.other: 'other',
 };

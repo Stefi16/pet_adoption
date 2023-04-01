@@ -1,10 +1,11 @@
+import 'package:pet_adoption/widgets/dialogs/basic_dialog.dart';
 import 'package:pet_adoption/widgets/dialogs/choose_age_dialog.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../app/app.locator.dart';
 import '../widgets/dialogs/add_profile_details_dialog.dart';
 
-enum DialogType { changeUsername, chooseAge, changePhone }
+enum DialogType { changeUsername, chooseAge, changePhone, basic }
 
 void setupDialogUi() {
   final DialogService dialogService = locator<DialogService>();
@@ -20,6 +21,8 @@ void setupDialogUi() {
           completer: completer,
           isPhoneDialog: true,
         ),
+    DialogType.basic: (context, sheetRequest, completer) =>
+        BasicDialog(request: sheetRequest, completer: completer),
   };
 
   dialogService.registerCustomDialogBuilders(builders);

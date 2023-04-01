@@ -4,25 +4,42 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pet_adoption/models/animal_adoption.dart';
 import 'package:pet_adoption/models/app_user.dart';
-import 'package:uuid/uuid.dart';
+import 'package:pet_adoption/models/chat_model.dart';
 
 const String _dbUsers = 'users';
 const String _dbAnimalAdoptions = 'animal_adoption';
+const String _dbChats = 'chats';
 
 class DatabaseService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   AppUser getCurrentUser() => _currentUser;
-  late final AppUser _currentUser;
+  AppUser _currentUser = AppUser.createNew('', '');
+
+  List<AppUser> getAllUsers() => _users;
+  AppUser getUsersById(String id) {
+    return _users.where((user) => user.id == id).first;
+  }
+
+  List<AppUser> _users = [];
 
   final List<AnimalAdoption> _animalAdoptions = [];
   List<AnimalAdoption> get animalAdoptions => _animalAdoptions;
 
+  final List<ChatModel> _chats = [];
+  List<ChatModel> get chats => _chats;
+
   void initDatabaseService(
-      AppUser currentUser, List<AnimalAdoption> animalAdoptions) {
+    AppUser currentUser,
+    List<AnimalAdoption> animalAdoptions,
+    List<AppUser> users,
+    List<ChatModel> chats,
+  ) {
     _currentUser = currentUser;
     _animalAdoptions.addAll(animalAdoptions);
+    _users = users;
+    _chats.addAll(chats);
   }
 
   Future<void> addUser(AppUser user) async {
@@ -36,6 +53,18 @@ class DatabaseService {
           (data) => AppUser.fromJson(
             data.data()!,
           ),
+        );
+  }
+
+  Future<List<AppUser>> getUsers() async {
+    return _firebaseFirestore.collection(_dbUsers).get().then(
+          (data) => data.docs
+              .map(
+                (animalAdoption) => AppUser.fromJson(
+                  animalAdoption.data(),
+                ),
+              )
+              .toList(),
         );
   }
 
@@ -68,8 +97,77 @@ class DatabaseService {
         );
   }
 
+  Future<bool> deleteAdoption(String id) async {
+    try {
+      await _firebaseFirestore.collection(_dbAnimalAdoptions).doc(id).delete();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Stream<List<AnimalAdoption>> getAdoptionsStream() {
+    return _firebaseFirestore
+        .collection(_dbAnimalAdoptions)
+        .snapshots()
+        .map((query) => query.docs)
+        .map(
+          (docs) => docs
+              .map(
+                (e) => AnimalAdoption.fromJson(
+                  e.data(),
+                ),
+              )
+              .toList(),
+        );
+  }
+
+  Future<void> addChat(ChatModel model) async {
+    await _firebaseFirestore.collection(_dbChats).doc(model.chatId).set(
+          model.toJson(),
+        );
+
+    final existingChat = _chats.where((chat) => chat.chatId == model.chatId);
+    if (existingChat.isNotEmpty) {
+      existingChat.first.messages = model.messages;
+    } else {
+      _chats.add(model);
+    }
+  }
+
+  Future<List<ChatModel>> getChats() async {
+    return _firebaseFirestore.collection(_dbChats).get().then(
+          (data) => data.docs
+              .map(
+                (animalAdoption) => ChatModel.fromJson(
+                  animalAdoption.data(),
+                ),
+              )
+              .toList(),
+        );
+  }
+
+  Stream<ChatModel> getChatStream(String chatId) {
+    return _firebaseFirestore.collection(_dbChats).doc(chatId).snapshots().map(
+          (event) => ChatModel.fromJson(
+            event.data()!,
+          ),
+        );
+  }
+
   Future<String> uploadImage(Uint8List imageBytes, String userId) async {
     final reference = _storage.ref('profile_picture/$userId.jpg');
+
+    await reference.putData(
+      imageBytes,
+      SettableMetadata(contentType: 'image/jpeg'),
+    );
+
+    return await reference.getDownloadURL();
+  }
+
+  Future<String> uploadChatImage(Uint8List imageBytes, String id) async {
+    final reference = _storage.ref('chat_image$id.jpg');
 
     await reference.putData(
       imageBytes,
