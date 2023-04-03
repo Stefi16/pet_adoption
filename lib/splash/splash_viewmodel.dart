@@ -29,9 +29,16 @@ class SplashViewModel extends BaseViewModel {
         chats,
       );
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _navigationService.replaceWith(Routes.mainView);
-      });
+      Future.delayed(
+        const Duration(seconds: 3),
+        () {
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) {
+              _navigationService.replaceWith(Routes.mainView);
+            },
+          );
+        },
+      );
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _navigationService.replaceWith(Routes.loginView);
