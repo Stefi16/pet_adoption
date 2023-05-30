@@ -13,7 +13,7 @@ class ThemesView extends StatelessWidget {
     final text = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return ViewModelBuilder<ThemesViewModel>.nonReactive(
+    return ViewModelBuilder<ThemesViewModel>.reactive(
       viewModelBuilder: () => ThemesViewModel(),
       builder: (context, viewModel, child) {
         final isDarkMode = viewModel.isDarkMode(context);
@@ -23,7 +23,7 @@ class ThemesView extends StatelessWidget {
             title: Text(text.themes),
             leading: IconButton(
               onPressed: () => viewModel.goBack(),
-              icon: Icon(Icons.arrow_back_ios_new),
+              icon: const Icon(Icons.arrow_back_ios_new),
             ),
           ),
           body: Padding(
@@ -46,8 +46,10 @@ class ThemesView extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: theme.iconTheme.color!,
-                          width: 2,
+                          color: viewModel.isSelected(index)
+                              ? theme.iconTheme.color!
+                              : theme.iconTheme.color!.withOpacity(0.5),
+                          width: viewModel.isSelected(index) ? 3 : 1,
                         ),
                         borderRadius: BorderRadius.circular(10),
                         color: getColorDependingOnMode,

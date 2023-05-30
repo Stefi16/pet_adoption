@@ -21,12 +21,17 @@ class SplashViewModel extends BaseViewModel {
       final adoptions = await _databaseService.getAdoptions();
       final users = await _databaseService.getUsers();
       final chats = await _databaseService.getChats();
+      chats.removeWhere(
+        (chat) =>
+            chat.senderId != currentUser.uid &&
+            chat.posterId != currentUser.uid,
+      );
 
       _databaseService.initDatabaseService(
-        appUser,
-        adoptions,
-        users,
-        chats,
+        currentUser: appUser,
+        animalAdoptions: adoptions,
+        users: users,
+        chats: chats,
       );
 
       Future.delayed(

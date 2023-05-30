@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pet_adoption/authentication/widgets/custom_textfield.dart';
 import 'package:pet_adoption/main/tabs/add_new_adoption/widgets/choose_age_wheel.dart';
 import 'package:pet_adoption/main/tabs/add_new_adoption/widgets/choose_gender_radio_button.dart';
@@ -151,6 +152,11 @@ class _NameTextField extends ViewModelWidget<AddNewAdoptionViewModel> {
             isBorderPrimaryColor: true,
             textInputAction: TextInputAction.done,
             controller: viewModel.nameController,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                RegExp(r'^[a-zA-Zа-яА-Я\s-]+$'),
+              ),
+            ],
           ),
           const SizedBox(height: 5),
           if (viewModel.hasNameError)
@@ -182,6 +188,11 @@ class _CountryTextField extends ViewModelWidget<AddNewAdoptionViewModel> {
           textInputAction: TextInputAction.next,
           controller: viewModel.countryController,
           onEditingComplete: () => viewModel.cityFocusNode.requestFocus(),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(
+              RegExp(r'^[a-zA-Zа-яА-Я\s-]+$'),
+            ),
+          ],
         ),
         if (viewModel.hasCountryError) ErrorText(text: text.countryError),
         const SizedBox(height: _commonPadding),
@@ -209,6 +220,11 @@ class _CityTextField extends ViewModelWidget<AddNewAdoptionViewModel> {
           controller: viewModel.cityController,
           onEditingComplete: () =>
               viewModel.descriptionFocusNode.requestFocus(),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(
+              RegExp(r'^[a-zA-Zа-яА-Я\s-]+$'),
+            ),
+          ],
         ),
         if (viewModel.hasCityError) ErrorText(text: text.cityError),
         const SizedBox(height: _commonPadding),

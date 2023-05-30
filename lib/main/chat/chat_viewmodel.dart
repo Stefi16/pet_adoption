@@ -36,7 +36,9 @@ class ChatViewModel extends BaseViewModel {
     _currentUser = currentUser;
     _userPostedAdoption = userPostedAdoption;
     _adoption = adoption;
-    final currentChat = _databaseService.chats.where(
+    final chats = await _databaseService.getChats();
+
+    final currentChat = chats.where(
       (chat) => chat.adoptionId == adoption.adoptionId,
     );
 
@@ -91,7 +93,7 @@ class ChatViewModel extends BaseViewModel {
   }
 
   AppUser getUser(String userId) {
-    return _databaseService.getUsersById(userId);
+    return _databaseService.getUserById(userId);
   }
 
   void uploadPhoto(BuildContext context) async {

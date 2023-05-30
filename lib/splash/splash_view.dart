@@ -17,15 +17,10 @@ class SplashView extends StatelessWidget {
         viewModelBuilder: () => SplashViewModel(),
         onViewModelReady: (vm) => vm.init(),
         builder: (context, viewModel, child) => Center(
-          child: Platform.isAndroid
-              ? SizedBox(
-                  height: 300,
-                  child: Lottie.asset('assets/animations/loading_dog.json'),
-                )
-              : SizedBox(
-                  height: 300,
-                  child: Lottie.asset('assets/animations/loading_cat.json'),
-                ),
+          child: SizedBox(
+            height: 300,
+            child: Lottie.asset('assets/animations/loading_dog.json'),
+          ),
         ),
       ),
     );

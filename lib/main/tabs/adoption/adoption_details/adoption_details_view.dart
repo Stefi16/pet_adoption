@@ -6,6 +6,7 @@ import 'package:pet_adoption/models/animal_adoption.dart';
 import 'package:pet_adoption/utils/extensions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pet_adoption/widgets/custom_button.dart';
+import 'package:pet_adoption/widgets/profile_photo.dart';
 import 'package:stacked/stacked.dart';
 
 import 'adoption_details_viewmodel.dart';
@@ -45,6 +46,7 @@ class AdoptionDetailsView extends StatelessWidget {
                   imageUrl: adoption.photoUrl ?? '',
                   height: height * 0.59,
                   fit: BoxFit.cover,
+                  width: double.maxFinite,
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -171,101 +173,106 @@ class AdoptionDetailsView extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 20),
-                            Row(children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: theme.iconTheme.color!,
-                                    width: 0.5,
+                            Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: theme.iconTheme.color!,
+                                      width: 0.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      _photoSize,
+                                    ),
                                   ),
-                                  borderRadius: BorderRadius.circular(
-                                    _photoSize,
-                                  ),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                    _photoSize,
-                                  ),
-                                  child: CachedNetworkImage(
-                                    imageUrl: viewModel.getPhotoUrl(),
-                                    progressIndicatorBuilder:
-                                        (context, url, progress) {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: progress.progress,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      _photoSize,
+                                    ),
+                                    child: CachedNetworkImage(
+                                      imageUrl: viewModel.getPhotoUrl(),
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) {
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            value: progress.progress,
+                                          ),
+                                        );
+                                      },
+                                      width: _photoSize,
+                                      height: _photoSize,
+                                      fit: BoxFit.fill,
+                                      errorWidget: (_, __, ___) => Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: theme.primaryColorDark,
                                         ),
-                                      );
-                                    },
-                                    width: _photoSize,
-                                    height: _photoSize,
-                                    fit: BoxFit.fill,
-                                    errorWidget: (_, __, ___) => Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: theme.primaryColorDark,
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          username.isEmpty
-                                              ? email[0].toUpperCase()
-                                              : username[0].toUpperCase(),
-                                          style: const TextStyle(
-                                            fontSize: 40,
+                                        child: Center(
+                                          child: Text(
+                                            username.isEmpty
+                                                ? email[0].toUpperCase()
+                                                : username[0].toUpperCase(),
+                                            style: const TextStyle(
+                                              fontSize: 40,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              SizedBox(
-                                width: width * 0.37,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      username.isEmpty ? email : username,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: theme.iconTheme.color,
-                                        fontWeight: FontWeight.bold,
+                                const SizedBox(width: 10),
+                                SizedBox(
+                                  width: width * 0.37,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        username.isEmpty ? email : username,
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: theme.iconTheme.color,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '${text.owner} ${adoption.animalName.capitalizeFirstLetter()}',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: theme.iconTheme.color,
+                                      Text(
+                                        '${text.owner} ${adoption.animalName.capitalizeFirstLetter()}',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: theme.iconTheme.color,
+                                        ),
+                                        textAlign: TextAlign.start,
                                       ),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Spacer(),
-                              _RoundedButton(
-                                icon: FaIcon(
-                                  FontAwesomeIcons.solidComments,
-                                  color: theme.iconTheme.color,
-                                ),
-                                onTap: () => viewModel.goToChatScreen(),
-                                buttonColor:
-                                    theme.primaryColor.withOpacity(0.3),
-                              ),
-                              const SizedBox(width: 5),
-                              if (viewModel.shouldShowPhoneButton())
-                                _RoundedButton(
-                                  icon: FaIcon(
-                                    FontAwesomeIcons.phoneVolume,
-                                    color: theme.iconTheme.color,
+                                    ],
                                   ),
-                                  onTap: () => viewModel.onPhoneNumberTap(),
-                                  buttonColor:
-                                      theme.primaryColor.withOpacity(0.3),
                                 ),
-                            ]),
+                                const Spacer(),
+                                if (viewModel
+                                    .shouldShowPhoneorChatButtons()) ...[
+                                  _RoundedButton(
+                                    icon: FaIcon(
+                                      FontAwesomeIcons.solidComments,
+                                      color: theme.iconTheme.color,
+                                    ),
+                                    onTap: () => viewModel.goToChatScreen(),
+                                    buttonColor:
+                                        theme.primaryColor.withOpacity(0.3),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  _RoundedButton(
+                                    icon: FaIcon(
+                                      FontAwesomeIcons.phoneVolume,
+                                      color: theme.iconTheme.color,
+                                    ),
+                                    onTap: () => viewModel.onPhoneNumberTap(),
+                                    buttonColor:
+                                        theme.primaryColor.withOpacity(0.3),
+                                  ),
+                                ]
+                              ],
+                            ),
                             const SizedBox(height: 20),
                             CustomButton(
                               text: text.description,

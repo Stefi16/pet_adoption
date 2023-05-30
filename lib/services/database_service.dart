@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pet_adoption/models/animal_adoption.dart';
 import 'package:pet_adoption/models/app_user.dart';
 import 'package:pet_adoption/models/chat_model.dart';
@@ -18,24 +19,27 @@ class DatabaseService {
   AppUser _currentUser = AppUser.createNew('', '');
 
   List<AppUser> getAllUsers() => _users;
-  AppUser getUsersById(String id) {
+
+  AppUser getUserById(String id) {
     return _users.where((user) => user.id == id).first;
   }
 
   List<AppUser> _users = [];
 
   final List<AnimalAdoption> _animalAdoptions = [];
+
   List<AnimalAdoption> get animalAdoptions => _animalAdoptions;
 
   final List<ChatModel> _chats = [];
+
   List<ChatModel> get chats => _chats;
 
-  void initDatabaseService(
-    AppUser currentUser,
-    List<AnimalAdoption> animalAdoptions,
-    List<AppUser> users,
-    List<ChatModel> chats,
-  ) {
+  void initDatabaseService({
+    required AppUser currentUser,
+    required List<AnimalAdoption> animalAdoptions,
+    required List<AppUser> users,
+    required List<ChatModel> chats,
+  }) {
     _currentUser = currentUser;
     _animalAdoptions.addAll(animalAdoptions);
     _users = users;
@@ -62,6 +66,22 @@ class DatabaseService {
               .map(
                 (animalAdoption) => AppUser.fromJson(
                   animalAdoption.data(),
+                ),
+              )
+              .toList(),
+        );
+  }
+
+  Stream<List<AppUser>> getUsersStream() {
+    return _firebaseFirestore
+        .collection(_dbUsers)
+        .snapshots()
+        .map((query) => query.docs)
+        .map(
+          (docs) => docs
+              .map(
+                (e) => AppUser.fromJson(
+                  e.data(),
                 ),
               )
               .toList(),
@@ -100,6 +120,16 @@ class DatabaseService {
   Future<bool> deleteAdoption(String id) async {
     try {
       await _firebaseFirestore.collection(_dbAnimalAdoptions).doc(id).delete();
+      await _deleteAdoptionImage(id);
+
+      final chatsToDelete = chats.where((chat) => chat.adoptionId == id);
+      for (final chat in chatsToDelete) {
+        chats.removeWhere(
+          (c) => chat.chatId == c.chatId,
+        );
+        await deleteChat(chat.chatId);
+      }
+
       return true;
     } catch (e) {
       return false;
@@ -147,12 +177,32 @@ class DatabaseService {
         );
   }
 
+  Stream<List<ChatModel>> getChatsStream() {
+    return _firebaseFirestore
+        .collection(_dbChats)
+        .snapshots()
+        .map((query) => query.docs)
+        .map(
+          (docs) => docs
+              .map(
+                (e) => ChatModel.fromJson(
+                  e.data(),
+                ),
+              )
+              .toList(),
+        );
+  }
+
   Stream<ChatModel> getChatStream(String chatId) {
     return _firebaseFirestore.collection(_dbChats).doc(chatId).snapshots().map(
           (event) => ChatModel.fromJson(
             event.data()!,
           ),
         );
+  }
+
+  Future<void> deleteChat(String id) async {
+    await _firebaseFirestore.collection(_dbChats).doc(id).delete();
   }
 
   Future<String> uploadImage(Uint8List imageBytes, String userId) async {
@@ -187,5 +237,11 @@ class DatabaseService {
     );
 
     return await reference.getDownloadURL();
+  }
+
+  Future<void> _deleteAdoptionImage(String adoptionId) async {
+    final reference = _storage.ref('adoption_picture/$adoptionId.jpg');
+
+    await reference.delete();
   }
 }

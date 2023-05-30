@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/main/tabs/profile/profile_viewmodel.dart';
+import 'package:pet_adoption/widgets/profile_photo.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -33,35 +34,11 @@ class AccountWidget extends ViewModelWidget<ProfileViewModel> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(_photoSize),
-                  child: CachedNetworkImage(
-                    imageUrl: viewModel.getPhotoUrl(),
-                    progressIndicatorBuilder: (context, url, progress) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: progress.progress,
-                        ),
-                      );
-                    },
-                    fit: BoxFit.fitHeight,
-                    errorWidget: (_, __, ___) => Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: theme.primaryColorDark,
-                      ),
-                      child: Center(
-                        child: Text(
-                          username.isEmpty
-                              ? email[0].toUpperCase()
-                              : username[0].toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 50,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                ProfilePhoto(
+                  photoSize: _photoSize,
+                  photoUrl: viewModel.getPhotoUrl(),
+                  email: email,
+                  username: username,
                 ),
                 Align(
                   alignment: Alignment.topRight,

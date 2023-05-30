@@ -5,22 +5,23 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i10;
+import 'package:flutter/material.dart' as _i11;
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/authentication/login/login_view.dart' as _i3;
 import 'package:pet_adoption/authentication/registration/registration_view.dart'
     as _i4;
+import 'package:pet_adoption/main/chat/all_chats/all_chats_view.dart' as _i10;
 import 'package:pet_adoption/main/chat/chat_view.dart' as _i9;
 import 'package:pet_adoption/main/main_view.dart' as _i5;
 import 'package:pet_adoption/main/search/search_view.dart' as _i8;
 import 'package:pet_adoption/main/tabs/adoption/adoption_details/adoption_details_view.dart'
     as _i7;
 import 'package:pet_adoption/main/tabs/profile/themes/themes_view.dart' as _i6;
-import 'package:pet_adoption/models/animal_adoption.dart' as _i11;
-import 'package:pet_adoption/models/app_user.dart' as _i12;
+import 'package:pet_adoption/models/animal_adoption.dart' as _i12;
+import 'package:pet_adoption/models/app_user.dart' as _i13;
 import 'package:pet_adoption/splash/splash_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i13;
+import 'package:stacked_services/stacked_services.dart' as _i14;
 
 class Routes {
   static const splashView = '/';
@@ -39,6 +40,8 @@ class Routes {
 
   static const chatView = '/chat-view';
 
+  static const allChatsView = '/all-chats-view';
+
   static const all = <String>{
     splashView,
     loginView,
@@ -48,6 +51,7 @@ class Routes {
     adoptionDetailsView,
     searchView,
     chatView,
+    allChatsView,
   };
 }
 
@@ -85,39 +89,43 @@ class StackedRouter extends _i1.RouterBase {
       Routes.chatView,
       page: _i9.ChatView,
     ),
+    _i1.RouteDef(
+      Routes.allChatsView,
+      page: _i10.AllChatsView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.SplashView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.SplashView(),
         settings: data,
         maintainState: false,
       );
     },
     _i3.LoginView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.LoginView(),
         settings: data,
         maintainState: false,
       );
     },
     _i4.RegistrationView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.RegistrationView(),
         settings: data,
         maintainState: false,
       );
     },
     _i5.MainView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.MainView(),
         settings: data,
         maintainState: false,
       );
     },
     _i6.ThemesView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.ThemesView(),
         settings: data,
         maintainState: false,
@@ -125,7 +133,7 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i7.AdoptionDetailsView: (data) {
       final args = data.getArgs<AdoptionDetailsViewArguments>(nullOk: false);
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i7.AdoptionDetailsView(key: args.key, adoption: args.adoption),
         settings: data,
@@ -133,7 +141,7 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i8.SearchView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.SearchView(),
         settings: data,
         maintainState: false,
@@ -141,12 +149,19 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i9.ChatView: (data) {
       final args = data.getArgs<ChatViewArguments>(nullOk: false);
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => _i9.ChatView(
             key: args.key,
             animalAdoption: args.animalAdoption,
             currentUser: args.currentUser,
             userPostedAdoption: args.userPostedAdoption),
+        settings: data,
+        maintainState: false,
+      );
+    },
+    _i10.AllChatsView: (data) {
+      return _i11.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i10.AllChatsView(),
         settings: data,
         maintainState: false,
       );
@@ -165,9 +180,9 @@ class AdoptionDetailsViewArguments {
     required this.adoption,
   });
 
-  final _i10.Key? key;
+  final _i11.Key? key;
 
-  final _i11.AnimalAdoption adoption;
+  final _i12.AnimalAdoption adoption;
 
   @override
   String toString() {
@@ -183,13 +198,13 @@ class ChatViewArguments {
     required this.userPostedAdoption,
   });
 
-  final _i10.Key? key;
+  final _i11.Key? key;
 
-  final _i11.AnimalAdoption animalAdoption;
+  final _i12.AnimalAdoption animalAdoption;
 
-  final _i12.AppUser currentUser;
+  final _i13.AppUser currentUser;
 
-  final _i12.AppUser userPostedAdoption;
+  final _i13.AppUser userPostedAdoption;
 
   @override
   String toString() {
@@ -197,7 +212,7 @@ class ChatViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i13.NavigationService {
+extension NavigatorStateExtension on _i14.NavigationService {
   Future<dynamic> navigateToSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -269,8 +284,8 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> navigateToAdoptionDetailsView({
-    _i10.Key? key,
-    required _i11.AnimalAdoption adoption,
+    _i11.Key? key,
+    required _i12.AnimalAdoption adoption,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -300,10 +315,10 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> navigateToChatView({
-    _i10.Key? key,
-    required _i11.AnimalAdoption animalAdoption,
-    required _i12.AppUser currentUser,
-    required _i12.AppUser userPostedAdoption,
+    _i11.Key? key,
+    required _i12.AnimalAdoption animalAdoption,
+    required _i13.AppUser currentUser,
+    required _i13.AppUser userPostedAdoption,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -316,6 +331,20 @@ extension NavigatorStateExtension on _i13.NavigationService {
             animalAdoption: animalAdoption,
             currentUser: currentUser,
             userPostedAdoption: userPostedAdoption),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToAllChatsView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.allChatsView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -393,8 +422,8 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> replaceWithAdoptionDetailsView({
-    _i10.Key? key,
-    required _i11.AnimalAdoption adoption,
+    _i11.Key? key,
+    required _i12.AnimalAdoption adoption,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -424,10 +453,10 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> replaceWithChatView({
-    _i10.Key? key,
-    required _i11.AnimalAdoption animalAdoption,
-    required _i12.AppUser currentUser,
-    required _i12.AppUser userPostedAdoption,
+    _i11.Key? key,
+    required _i12.AnimalAdoption animalAdoption,
+    required _i13.AppUser currentUser,
+    required _i13.AppUser userPostedAdoption,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -440,6 +469,20 @@ extension NavigatorStateExtension on _i13.NavigationService {
             animalAdoption: animalAdoption,
             currentUser: currentUser,
             userPostedAdoption: userPostedAdoption),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithAllChatsView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.allChatsView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

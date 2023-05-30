@@ -50,7 +50,7 @@ class CustomTextField extends StatelessWidget {
     final theme = Theme.of(context);
     final Color borderColor =
         isBorderPrimaryColor ? theme.primaryColor : Colors.white;
-    final Color errorColor = theme.colorScheme.error;
+    const Color errorColor = Colors.red;
     final Color currentColor = hasError ? errorColor : borderColor;
 
     return Focus(

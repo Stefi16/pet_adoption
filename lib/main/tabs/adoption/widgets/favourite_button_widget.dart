@@ -49,7 +49,7 @@ class _FavouriteButtonWidgetState extends State<FavouriteButtonWidget>
         Icons8.heart_color,
         repeat: false,
         controller: _animationController,
-        fit: BoxFit.contain,
+        fit: BoxFit.fill,
       ),
     );
   }

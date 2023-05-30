@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet_adoption/main/tabs/adoption/widgets/adoption_card.dart';
+import 'package:pet_adoption/utils/common_logic.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -17,33 +18,17 @@ class AdoptionView extends StatelessWidget {
       onViewModelReady: (vm) => vm.init(),
       viewModelBuilder: () => AdoptionViewModel(),
       builder: (context, viewModel, child) {
-        return Container(
-          color: theme.iconTheme.color!.withOpacity(0.05),
-          child: CustomScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            slivers: [
-              SliverAppBar(
-                pinned: true,
-                toolbarHeight: kToolbarHeight + 25,
-                backgroundColor: theme.primaryColor,
-                shadowColor: theme.primaryColor,
-                elevation: 10,
-                bottom: _CategoriesBar(
-                  length: viewModel.sortingCategories.length,
-                ),
-                actions: [
-                  IconButton(
-                    splashRadius: 25,
-                    onPressed: () => viewModel.goToSearchScreen(),
-                    icon: const Icon(
-                      Icons.search_rounded,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
-              const _AdoptionsList(),
-            ],
+        return Scaffold(
+          backgroundColor: theme.iconTheme.color!.withOpacity(0.05),
+          body: const _AdoptionsList(),
+          appBar: AppBar(
+            toolbarHeight: 24,
+            centerTitle: true,
+            backgroundColor: theme.primaryColor,
+            bottom: _CategoriesBar(
+              onTap: () => viewModel.openSortingSheet(),
+              length: viewModel.sortingCategories.length,
+            ),
           ),
         );
       },
@@ -115,40 +100,36 @@ class _AdoptionsList extends ViewModelWidget<AdoptionViewModel> {
     final height = MediaQuery.of(context).size.height;
 
     if (adoptionCount == 0) {
-      return SliverPadding(
+      return Padding(
         padding: EdgeInsets.only(top: height * 0.3),
-        sliver: SliverToBoxAdapter(
-          child: Text(
-            text.emptyAnimalTypeCategory,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: theme.primaryColor,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
+        child: Text(
+          text.emptyAnimalTypeCategory,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: theme.primaryColor,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
           ),
         ),
       );
     }
 
-    return SliverPadding(
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      sliver: SliverGrid(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final adoption = viewModel.adoptions.elementAt(index);
+      child: GridView.builder(
+        itemCount: adoptionCount,
+        itemBuilder: (context, index) {
+          final adoption = viewModel.adoptions.elementAt(index);
 
-            return AdoptionCard(
-              onCardTap: () => viewModel.goToAdoptionDetailsPage(
-                adoption,
-              ),
-              onFavouritesTap: () => viewModel.toggleFavourites(adoption),
-              adoption: adoption,
-              isFavourite: viewModel.isFavourite(adoption),
-            );
-          },
-          childCount: adoptionCount,
-        ),
+          return AdoptionCard(
+            onCardTap: () => viewModel.goToAdoptionDetailsPage(
+              adoption,
+            ),
+            onFavouritesTap: () => viewModel.toggleFavourites(adoption),
+            adoption: adoption,
+            isFavourite: viewModel.isFavourite(adoption),
+          );
+        },
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1,
@@ -160,16 +141,19 @@ class _AdoptionsList extends ViewModelWidget<AdoptionViewModel> {
   }
 }
 
-class _CategoriesBar extends StatelessWidget with PreferredSizeWidget {
+class _CategoriesBar extends ViewModelWidget<AdoptionViewModel>
+    with PreferredSizeWidget {
   const _CategoriesBar({
     Key? key,
     required this.length,
+    required this.onTap,
   }) : super(key: key);
 
   final int length;
+  final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, AdoptionViewModel viewModel) {
     final theme = Theme.of(context);
 
     return Padding(
@@ -185,22 +169,39 @@ class _CategoriesBar extends StatelessWidget with PreferredSizeWidget {
               thickness: 2,
             ),
             const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      left: index == 0 ? 5 : 0,
-                      right: 5,
+            Row(
+              children: [
+                IconButton(
+                  onPressed: onTap,
+                  padding: EdgeInsets.zero,
+                  splashRadius: 20,
+                  visualDensity: getMinimumDensity(),
+                  icon: FaIcon(
+                    viewModel.getCurrentGenderIconData(),
+                    color: theme.scaffoldBackgroundColor,
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: 36,
+                    child: ListView.builder(
+                      itemCount: length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            left: index == 0 ? 5 : 0,
+                            right: 5,
+                          ),
+                          child: _CategoriesChips(
+                            index: index,
+                          ),
+                        );
+                      },
                     ),
-                    child: _CategoriesChips(
-                      index: index,
-                    ),
-                  );
-                },
-              ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

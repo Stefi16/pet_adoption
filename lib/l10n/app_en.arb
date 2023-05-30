@@ -68,12 +68,12 @@
   "phoneError": "The phone number is in wrong format",
   "photoOfPet": "Photo of pet",
   "publish": "Publish",
-  "nameError": "The name of the pet should be longer than 2 symbols",
+  "nameError": "The name of the pet should be at least 2 letters",
   "genderError": "Please choose gender",
   "animalTypeError": "Please choose type",
   "ageError": "Please choose age",
-  "countryError": "Please enter a country with more than 2 symbols",
-  "cityError": "Please enter a city with more than 1 symbol",
+  "countryError": "Please enter a country with more than 2 letters",
+  "cityError": "Please enter a city with more than 1 letter",
   "descriptionError": "Please enter a description with at least 10 symbols",
   "owner": "Owner of",
   "errorWhileLaunchingPhoneNumber": "Error while launching phone number",
@@ -82,5 +82,7 @@
   "search": "Search",
   "searchDescription": "Ability to search the title and description of an adoption.",
   "chat": "Chat",
-  "noMessagesYet": "No messages have been sent yet"
+  "noMessagesYet": "No messages have been sent yet",
+  "all": "All",
+  "photoWasSent": "A photo was sent."
 }

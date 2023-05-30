@@ -12,6 +12,7 @@ class MainViewModel extends BaseViewModel {
 
   int _currentTabIndex = 0;
   int get currentTabIndex => _currentTabIndex;
+
   set _setCurrentTabIndex(int index) {
     if (index != currentTabIndex) {
       _currentTabIndex = index;
@@ -25,4 +26,12 @@ class MainViewModel extends BaseViewModel {
   void changeTab(int index) => _setCurrentTabIndex = index;
 
   void goToChatScreen() => _navigationService.navigateTo(Routes.chatView);
+
+  void goToSearchScreen() => _navigationService.navigateTo(
+        Routes.searchView,
+      );
+
+  void goToChatsScreen() => _navigationService.navigateTo(
+        Routes.allChatsView,
+      );
 }

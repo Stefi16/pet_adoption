@@ -35,7 +35,7 @@ class UploadPhotoWidget extends ViewModelWidget<AddNewAdoptionViewModel> {
                 borderRadius: BorderRadius.circular(photoSize),
                 child: Image.memory(
                   viewModel.chosenPhoto!,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               ),
       ),

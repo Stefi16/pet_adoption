@@ -101,15 +101,16 @@ class SearchViewModel extends BaseAdoptionViewModel {
 
     result.addAll(
       allAdoptions.where(
-        (adoption) => adoption.animalName == searchValue,
+        (adoption) =>
+            adoption.animalName.toLowerCase() == searchValue.toLowerCase(),
       ),
     );
 
     result.addAll(
       allAdoptions.where(
-        (adoption) => adoption.animalName.contains(
-          searchValue.removeWhiteSpaces(),
-        ),
+        (adoption) => adoption.animalName.toLowerCase().contains(
+              searchValue.removeWhiteSpaces().toLowerCase(),
+            ),
       ),
     );
 
@@ -121,8 +122,8 @@ class SearchViewModel extends BaseAdoptionViewModel {
       }
 
       for (final word in wordsInName) {
-        final isPresent = word.removeWhiteSpaces().contains(
-              searchValue.removeWhiteSpaces(),
+        final isPresent = word.removeWhiteSpaces().toLowerCase().contains(
+              searchValue.removeWhiteSpaces().toLowerCase(),
             );
 
         if (isPresent) {
@@ -140,15 +141,16 @@ class SearchViewModel extends BaseAdoptionViewModel {
 
     result.addAll(
       allAdoptions.where(
-        (adoption) => adoption.description == searchValue,
+        (adoption) =>
+            adoption.description.toLowerCase() == searchValue.toLowerCase(),
       ),
     );
 
     result.addAll(
       allAdoptions.where(
-        (adoption) => adoption.description.contains(
-          searchValue.removeWhiteSpaces(),
-        ),
+        (adoption) => adoption.description.toLowerCase().contains(
+              searchValue.removeWhiteSpaces().toLowerCase(),
+            ),
       ),
     );
 
@@ -160,8 +162,8 @@ class SearchViewModel extends BaseAdoptionViewModel {
       }
 
       for (final word in wordsInName) {
-        final isPresent = word.removeWhiteSpaces().contains(
-              searchValue.removeWhiteSpaces(),
+        final isPresent = word.removeWhiteSpaces().toLowerCase().contains(
+              searchValue.removeWhiteSpaces().toLowerCase(),
             );
 
         if (isPresent) {
@@ -179,7 +181,7 @@ class SearchViewModel extends BaseAdoptionViewModel {
     final List<AnimalAdoption> result = [];
 
     for (final adoption in adoptions) {
-      if (!_doesNotContainAnimalAdoption(adoption, adoptions)) {
+      if (_doesNotContainAnimalAdoption(adoption, result)) {
         result.add(adoption);
       }
     }
@@ -187,11 +189,14 @@ class SearchViewModel extends BaseAdoptionViewModel {
     return result;
   }
 
-  bool _doesNotContainAnimalAdoption(AnimalAdoption comparingAdoption,
-      List<AnimalAdoption> adoptionsToCompare) {
+  bool _doesNotContainAnimalAdoption(
+    AnimalAdoption comparingAdoption,
+    List<AnimalAdoption> adoptionsToCompare,
+  ) {
     return adoptionsToCompare
-        .where((adoption) =>
-            comparingAdoption.adoptionId == comparingAdoption.adoptionId)
+        .where(
+          (adoption) => adoption.adoptionId == comparingAdoption.adoptionId,
+        )
         .isEmpty;
   }
 

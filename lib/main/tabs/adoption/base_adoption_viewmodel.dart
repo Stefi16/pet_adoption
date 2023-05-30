@@ -10,15 +10,31 @@ abstract class BaseAdoptionViewModel extends BaseViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
 
   List<AnimalAdoption> favouriteAdoptions = [];
-  List<AnimalAdoption> get allAdoptions => _databaseService.animalAdoptions;
+
+  List<AnimalAdoption> get allAdoptions {
+    final allAdoptions = _databaseService.animalAdoptions;
+
+    allAdoptions.sort(
+      (a, b) => b.datePublished!.compareTo(a.datePublished!),
+    );
+
+    allAdoptions.removeWhere(
+      (adoption) => !adoption.isApproved,
+    );
+
+    return allAdoptions;
+  }
+
   late StreamSubscription<List<AnimalAdoption>> _streamSubscription;
 
   void init() {
     favouriteAdoptions.addAll(
       getFavouriteAdoptions(),
     );
-    _streamSubscription =
-        _databaseService.getAdoptionsStream().listen(_refreshedAdoptions);
+
+    _streamSubscription = _databaseService.getAdoptionsStream().listen(
+          _refreshedAdoptions,
+        );
   }
 
   void _refreshedAdoptions(List<AnimalAdoption> animalAdoptions) {

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pet_adoption/main_app_viewmodel.dart';
 import 'package:pet_adoption/services/theme_switcher_service.dart';
+import 'package:pet_adoption/utils/setup_bottomsheet.dart';
 import 'package:pet_adoption/utils/setup_dialog.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -80,5 +81,6 @@ Future<void> _setAppOrientation() async {
 Future<void> _setupStackedServices() async {
   await setupLocator();
   setupDialogUi();
+  setupBottomSheetUi();
   await locator<ThemeSwitcherService>().init();
 }

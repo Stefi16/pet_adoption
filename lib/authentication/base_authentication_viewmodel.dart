@@ -84,6 +84,9 @@ abstract class BaseAuthenticationViewModel extends BaseViewModel {
     return !regExp.hasMatch(input);
   }
 
+  bool isAnyFieldEmpty() =>
+      emailTextController.text.isEmpty || passwordTextController.text.isEmpty;
+
   @override
   void dispose() {
     _emailTextController.dispose();

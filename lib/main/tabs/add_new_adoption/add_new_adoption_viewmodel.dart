@@ -161,8 +161,11 @@ class AddNewAdoptionViewModel extends BaseViewModel {
     final int? months = result?[keyMonths];
     final int? years = result?[keyYears];
 
-    if (months != null && years != null) {
-      _setAgeResult = AnimalAge(months: months, years: years);
+    if (months != null || years != null) {
+      _setAgeResult = AnimalAge(
+        months: months ?? 0,
+        years: years ?? 0,
+      );
     }
   }
 
@@ -206,12 +209,14 @@ class AddNewAdoptionViewModel extends BaseViewModel {
       );
     }
 
+    final isCurrentUserAdmin = _databaseService.getCurrentUser().isAdmin;
+
     final newAdoption = AnimalAdoption(
       userId: _authService.currentUserId!,
       animalName: nameController.text,
       genderType: _chosenGender!,
       animalType: _chosenType!,
-      isApproved: false,
+      isApproved: isCurrentUserAdmin,
       country: countryController.text,
       city: cityController.text,
       description: descriptionController.text,

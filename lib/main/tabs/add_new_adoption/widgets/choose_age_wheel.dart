@@ -81,7 +81,7 @@ Future<Map<String, int?>?> _showCupertinoModalPicker(
   return await showModalBottomSheet<Map<String, int?>?>(
     context: context,
     builder: (newContext) {
-      final months = positiveIntegers.take(13);
+      final months = positiveIntegers.take(12);
       final years = positiveIntegers.take(31);
       final text = AppLocalizations.of(context)!;
 

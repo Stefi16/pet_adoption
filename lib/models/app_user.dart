@@ -11,6 +11,8 @@ class AppUser {
   DateTime dateJoined;
   String? picture;
   String? phone;
+  @JsonKey(defaultValue: false)
+  bool isAdmin;
 
   AppUser({
     required this.id,
@@ -20,6 +22,7 @@ class AppUser {
     required this.dateJoined,
     this.picture,
     this.phone,
+    required this.isAdmin,
   });
 
   factory AppUser.createNew(String id, String email) {
@@ -28,6 +31,7 @@ class AppUser {
       email: email,
       favouritePosts: [],
       dateJoined: DateTime.now(),
+      isAdmin: false,
     );
   }
 

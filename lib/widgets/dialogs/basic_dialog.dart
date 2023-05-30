@@ -40,8 +40,7 @@ class BasicDialog extends StatelessWidget {
             const SizedBox(height: 10),
             if (description != null)
               Text(
-                description +
-                    'dmddmdmdmdmkrjfnrekjfnrek lkenmfelknfmelk nlkefneklwfmnwelkv nlkewvnklewnflwkenfwekl lkwenmflwk',
+                description,
                 style: TextStyle(
                   fontSize: 17,
                   color: theme.iconTheme.color!,

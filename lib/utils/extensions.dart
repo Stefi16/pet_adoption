@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet_adoption/utils/enums.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/animal_age.dart';
+import '../widgets/sorting_sheet.dart';
 
 extension Capitalize on String {
   String capitalizeFirstLetter() {
@@ -67,9 +69,9 @@ extension AnimalGenderIcon on AnimalGender {
   IconData getAnimalGenderIcon() {
     switch (this) {
       case AnimalGender.female:
-        return Icons.female;
+        return FontAwesomeIcons.venus;
       case AnimalGender.male:
-        return Icons.male;
+        return FontAwesomeIcons.mars;
     }
   }
 }
@@ -81,6 +83,36 @@ extension AnimalGenderBackground on AnimalGender {
         return 'assets/backgrounds/female_pet_background.png';
       case AnimalGender.male:
         return 'assets/backgrounds/male_pet_background.png';
+    }
+  }
+}
+
+extension SortingAnimalGenderIcon on SortingGenderTypes {
+  IconData getAnimalGenderIcon() {
+    switch (this) {
+      case SortingGenderTypes.female:
+        return FontAwesomeIcons.venus;
+      case SortingGenderTypes.male:
+        return FontAwesomeIcons.mars;
+      case SortingGenderTypes.all:
+        return FontAwesomeIcons.marsAndVenus;
+    }
+  }
+}
+
+extension SortingAnimalGenderName on SortingGenderTypes {
+  String getSortingAnimalGenderName() {
+    final text = AppLocalizations.of(
+      StackedService.navigatorKey!.currentContext!,
+    )!;
+
+    switch (this) {
+      case SortingGenderTypes.female:
+        return text.female;
+      case SortingGenderTypes.male:
+        return text.male;
+      case SortingGenderTypes.all:
+        return text.all;
     }
   }
 }

@@ -29,7 +29,7 @@ class AdoptionDetailsViewModel extends BaseAdoptionViewModel {
   void init() {
     super.init();
     _currentUser = _databaseService.getCurrentUser();
-    _userPostedAdoption = _databaseService.getUsersById(_adoption.userId);
+    _userPostedAdoption = _databaseService.getUserById(_adoption.userId);
   }
 
   void goBack() {
@@ -45,7 +45,7 @@ class AdoptionDetailsViewModel extends BaseAdoptionViewModel {
   String getUsername() => _userPostedAdoption.username ?? '';
   String getEmail() => _userPostedAdoption.email;
 
-  bool shouldShowPhoneButton() {
+  bool shouldShowPhoneorChatButtons() {
     final isPhoneNumberPresent = (_userPostedAdoption.phone ?? '').isNotEmpty;
     final hasTheUserPostedTheAdoption = hasTheSameUserPostedTheAdoption();
 

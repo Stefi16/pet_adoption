@@ -45,7 +45,7 @@ class AdoptionCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 child: CachedNetworkImage(
                   imageUrl: adoption.photoUrl ?? '',
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   errorWidget: (context, _, __) {
                     return Container(
                       decoration: BoxDecoration(
@@ -76,7 +76,7 @@ class AdoptionCard extends StatelessWidget {
                     ),
                     color: theme.scaffoldBackgroundColor,
                   ),
-                  height: 65,
+                  height: 56,
                   width: double.maxFinite,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,14 +107,12 @@ class AdoptionCard extends StatelessWidget {
                             )
                         ],
                       ),
-                      const SizedBox(height: 5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 6,
-                              vertical: 5,
                             ),
                             child: Text(
                               adoption.animalAge.getAnimalAgeText(),

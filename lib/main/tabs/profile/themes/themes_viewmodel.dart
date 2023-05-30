@@ -20,4 +20,10 @@ class ThemesViewModel extends BaseViewModel {
   }
 
   void goBack() => _navigationService.back();
+
+  bool isSelected(int index) {
+    final currentIndex = _themeSwitcherService.currentColorTheme.value;
+
+    return currentIndex == index;
+  }
 }

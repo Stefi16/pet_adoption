@@ -10,7 +10,7 @@ class LoginViewModel extends BaseAuthenticationViewModel {
   final AuthService _authService = locator<AuthService>();
 
   void login() async {
-    if (hasTextFieldError() || isLoading) {
+    if (hasTextFieldError() || isLoading || isAnyFieldEmpty()) {
       return;
     }
 
@@ -22,7 +22,7 @@ class LoginViewModel extends BaseAuthenticationViewModel {
     final result = await _authService.loginUser(email, password);
 
     if (result) {
-      _navigationService.replaceWith(Routes.splashView);
+      _navigationService.clearStackAndShow(Routes.splashView);
     }
 
     setIsLoading = false;

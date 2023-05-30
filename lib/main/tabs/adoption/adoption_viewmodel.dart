@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:pet_adoption/app/app.router.dart';
 import 'package:pet_adoption/main/tabs/adoption/base_adoption_viewmodel.dart';
 import 'package:pet_adoption/utils/extensions.dart';
@@ -7,18 +8,25 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../app/app.locator.dart';
 import '../../../models/animal_adoption.dart';
 import '../../../utils/enums.dart';
+import '../../../utils/setup_bottomsheet.dart';
+import '../../../widgets/sorting_sheet.dart';
 
 const String _favouriteCategory = 'Favourite';
 
 class AdoptionViewModel extends BaseAdoptionViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
+  final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
 
   final List<String> sortingCategories = [];
 
   List<AnimalAdoption> adoptions = [];
 
   int _currentIndex = -1;
+
   int get currentIndex => _currentIndex;
+
+  SortingGenderTypes? currentType = SortingGenderTypes.all;
+
   set _setCurrentIndex(int index) {
     _currentIndex = index;
     _filterAdoptions();
@@ -50,7 +58,7 @@ class AdoptionViewModel extends BaseAdoptionViewModel {
     sortingCategories.addAll(
       List.generate(
         AnimalType.values.length,
-        (index) {
+            (index) {
           final currentType = AnimalType.values.elementAt(index);
           return currentType.name;
         },
@@ -62,7 +70,7 @@ class AdoptionViewModel extends BaseAdoptionViewModel {
     return AnimalType.values
         .where(
           (element) => element.name == name,
-        )
+    )
         .first;
   }
 
@@ -104,16 +112,30 @@ class AdoptionViewModel extends BaseAdoptionViewModel {
   void _filterAdoptions() {
     if (_currentIndex == -1) {
       adoptions = allAdoptions;
-      return;
-    }
-
-    if (_currentIndex == 0) {
+    } else if (_currentIndex == 0) {
       adoptions = getFavouriteAdoptions();
-      return;
+    } else {
+      adoptions = _getFilteredTypeAdoptions();
     }
 
-    adoptions = _getFilteredTypeAdoptions();
+    if (currentType == SortingGenderTypes.female) {
+      adoptions = adoptions
+          .where(
+            (a) => a.genderType == AnimalGender.female,
+          )
+          .toList();
+    } else if (currentType == SortingGenderTypes.male) {
+      adoptions = adoptions
+          .where(
+            (a) => a.genderType == AnimalGender.male,
+          )
+          .toList();
+    }
+
+    notifyListeners();
   }
+
+  IconData? getCurrentGenderIconData() => currentType?.getAnimalGenderIcon();
 
   List<AnimalAdoption> _getFilteredTypeAdoptions() {
     final selectedType = AnimalType.values.elementAt(_currentIndex - 1);
@@ -125,10 +147,6 @@ class AdoptionViewModel extends BaseAdoptionViewModel {
         .toList();
   }
 
-  void goToSearchScreen() => _navigationService.navigateTo(
-        Routes.searchView,
-      );
-
   void goToChatScreen() => _navigationService.navigateTo(Routes.chatView);
 
   @override
@@ -136,5 +154,22 @@ class AdoptionViewModel extends BaseAdoptionViewModel {
     adoptions = allAdoptions;
     _filterAdoptions();
     notifyListeners();
+  }
+
+  void openSortingSheet() async {
+    final SheetResponse? response = await _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.chooseGender,
+      isScrollControlled: true,
+      ignoreSafeArea: false,
+      barrierDismissible: true,
+      data: currentType,
+    );
+
+    if (response?.confirmed != true) {
+      return;
+    }
+
+    currentType = response!.data;
+    _filterAdoptions();
   }
 }

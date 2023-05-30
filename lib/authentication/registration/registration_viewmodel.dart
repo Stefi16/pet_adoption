@@ -70,7 +70,7 @@ class RegistrationViewModel extends BaseAuthenticationViewModel {
   }
 
   void registerUser() async {
-    if (hasTextFieldError() || isLoading) {
+    if (hasTextFieldError() || isLoading || isAnyFieldEmpty()) {
       return;
     }
 
@@ -103,6 +103,12 @@ class RegistrationViewModel extends BaseAuthenticationViewModel {
   void goToLoginPage() => _navigationService.replaceWith(
         Routes.loginView,
       );
+
+  @override
+  bool isAnyFieldEmpty() {
+    return super.isAnyFieldEmpty() ||
+        confirmPasswordTextController.text.isEmpty;
+  }
 
   @override
   void dispose() {

@@ -28,7 +28,14 @@ class ChatView extends StatelessWidget {
     final text = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          animalAdoption.animalName,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: ViewModelBuilder<ChatViewModel>.reactive(
         viewModelBuilder: () => ChatViewModel(),
         onViewModelReady: (vm) => vm.init(

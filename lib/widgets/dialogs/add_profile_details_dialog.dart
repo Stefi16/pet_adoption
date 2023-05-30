@@ -24,6 +24,7 @@ class AddProfileDetailsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return Dialog(
       child: KeyboardUnfocuser(
@@ -37,9 +38,10 @@ class AddProfileDetailsDialog extends StatelessWidget {
               children: [
                 Text(
                   isPhoneDialog ? text.addPhone : text.addUsername,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: theme.iconTheme.color,
                   ),
                 ),
                 _UserDetailsTextField(

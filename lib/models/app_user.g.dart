@@ -16,6 +16,7 @@ AppUser _$AppUserFromJson(Map<String, dynamic> json) => AppUser(
       dateJoined: DateTime.parse(json['dateJoined'] as String),
       picture: json['picture'] as String?,
       phone: json['phone'] as String?,
+      isAdmin: json['isAdmin'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$AppUserToJson(AppUser instance) => <String, dynamic>{
@@ -26,4 +27,5 @@ Map<String, dynamic> _$AppUserToJson(AppUser instance) => <String, dynamic>{
       'dateJoined': instance.dateJoined.toIso8601String(),
       'picture': instance.picture,
       'phone': instance.phone,
+      'isAdmin': instance.isAdmin,
     };
