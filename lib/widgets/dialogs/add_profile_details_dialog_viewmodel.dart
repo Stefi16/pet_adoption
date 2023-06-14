@@ -36,7 +36,7 @@ class AddProfileDetailsDialogViewModel extends BaseViewModel {
   }
 
   void _validateUsername() {
-    final username = textController.text;
+    final username = textController.text.removeWhiteSpaces();
 
     if (username.length > 3) {
       _setFieldError = false;

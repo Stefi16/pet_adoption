@@ -75,7 +75,13 @@ abstract class BaseAuthenticationViewModel extends BaseViewModel {
     _setHasPasswordError = validatePassword(passwordTextController.text);
   }
 
-  bool _validateEmail(String input) => !EmailValidator.validate(input);
+  bool _validateEmail(String input) {
+    const String emailExpression =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = RegExp(emailExpression);
+
+    return !regExp.hasMatch(input);
+  }
 
   bool validatePassword(String input) {
     const String passwordExpression = r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$';

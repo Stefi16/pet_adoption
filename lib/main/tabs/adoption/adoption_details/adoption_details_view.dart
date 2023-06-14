@@ -249,8 +249,8 @@ class AdoptionDetailsView extends StatelessWidget {
                                   ),
                                 ),
                                 const Spacer(),
-                                if (viewModel
-                                    .shouldShowPhoneorChatButtons()) ...[
+                                if (!viewModel
+                                    .hasTheSameUserPostedTheAdoption())
                                   _RoundedButton(
                                     icon: FaIcon(
                                       FontAwesomeIcons.solidComments,
@@ -260,7 +260,8 @@ class AdoptionDetailsView extends StatelessWidget {
                                     buttonColor:
                                         theme.primaryColor.withOpacity(0.3),
                                   ),
-                                  const SizedBox(width: 5),
+                                const SizedBox(width: 5),
+                                if (viewModel.shouldShowPhoneButton())
                                   _RoundedButton(
                                     icon: FaIcon(
                                       FontAwesomeIcons.phoneVolume,
@@ -270,7 +271,6 @@ class AdoptionDetailsView extends StatelessWidget {
                                     buttonColor:
                                         theme.primaryColor.withOpacity(0.3),
                                   ),
-                                ]
                               ],
                             ),
                             const SizedBox(height: 20),

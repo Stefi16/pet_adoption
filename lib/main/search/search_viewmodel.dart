@@ -108,9 +108,10 @@ class SearchViewModel extends BaseAdoptionViewModel {
 
     result.addAll(
       allAdoptions.where(
-        (adoption) => adoption.animalName.toLowerCase().contains(
-              searchValue.removeWhiteSpaces().toLowerCase(),
-            ),
+        (adoption) =>
+            adoption.animalName.toLowerCase().removeWhiteSpaces().contains(
+                  searchValue.removeWhiteSpaces().toLowerCase(),
+                ),
       ),
     );
 

@@ -101,11 +101,13 @@ class ProfileViewModel extends BaseViewModel {
 
     _setIsLoading = true;
     final success = await _authService.signOut();
-    _setIsLoading = false;
 
     if (success) {
+      await _themeSwitcherService.resetTheme();
       _navigationService.clearStackAndShow(Routes.loginView);
     }
+
+    _setIsLoading = false;
   }
 
   String getDateJoined() {

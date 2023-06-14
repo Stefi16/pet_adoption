@@ -92,7 +92,7 @@ class AllChatsViewModel extends BaseViewModel {
       (adoption) => currentChat.adoptionId == adoption.adoptionId,
     );
 
-    return adoption.first.animalName.removeWhiteSpaces();
+    return adoption.first.animalName;
   }
 
   AnimalAdoption getAdoption(ChatModel currentChat) {

@@ -45,7 +45,7 @@ class AdoptionDetailsViewModel extends BaseAdoptionViewModel {
   String getUsername() => _userPostedAdoption.username ?? '';
   String getEmail() => _userPostedAdoption.email;
 
-  bool shouldShowPhoneorChatButtons() {
+  bool shouldShowPhoneButton() {
     final isPhoneNumberPresent = (_userPostedAdoption.phone ?? '').isNotEmpty;
     final hasTheUserPostedTheAdoption = hasTheSameUserPostedTheAdoption();
 
