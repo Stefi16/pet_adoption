@@ -28,8 +28,8 @@ class AppUser {
     this.picture,
     this.phone,
     required this.isAdmin,
-    this.currentMobileTheme = FlexScheme.aquaBlue,
-    this.isDarkMode = false,
+    required this.currentMobileTheme,
+    required this.isDarkMode,
   });
 
   factory AppUser.createNew(String id, String email) {
@@ -39,6 +39,8 @@ class AppUser {
       favouritePosts: [],
       dateJoined: DateTime.now(),
       isAdmin: false,
+      isDarkMode: false,
+      currentMobileTheme: FlexScheme.aquaBlue,
     );
   }
 

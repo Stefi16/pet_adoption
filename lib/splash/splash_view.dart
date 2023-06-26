@@ -11,8 +11,10 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: theme.primaryColor,
       body: ViewModelBuilder<SplashViewModel>.nonReactive(
         viewModelBuilder: () => SplashViewModel(),
         onViewModelReady: (vm) => vm.init(),
